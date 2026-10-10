@@ -1,0 +1,454 @@
+{
+  "dataset": "30 generated synthetic held-out verifier fixtures; not independent external validation",
+  "evaluated_system": "deterministic structured-field verifier only",
+  "summary": {
+    "cases": 30,
+    "correct_dispositions": 30,
+    "unsupported_resolutions": 0,
+    "citation_id_valid_cases": 30,
+    "unnecessary_escalations": 0,
+    "total_verifier_latency_ms": 0.435,
+    "inference_cost_usd": 0,
+    "retrieval_completeness": 1.0,
+    "end_to_end_latency_ms": 3419.1,
+    "live_inference_cost_usd": 0.000485
+  },
+  "limitations": [
+    "All evidence is directly supplied to verify; retrieval and A2A are not exercised.",
+    "Citation validity checks ID existence, not semantic entailment.",
+    "Cases vary structured principal amounts; they do not establish arbitrary prose generalization.",
+    "Synthetic authoritative metadata is trusted; source authentication is an integration concern."
+  ],
+  "baselines": {
+    "rules_only": "executed: see baseline_comparison",
+    "centralized_agent": "executed: see baseline_comparison",
+    "distributed_agent": "executed: see baseline_comparison"
+  },
+  "results": [
+    {
+      "case_id": "valid_fee-0",
+      "group": "valid_fee",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.034
+    },
+    {
+      "case_id": "valid_fee-1",
+      "group": "valid_fee",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.024
+    },
+    {
+      "case_id": "valid_fee-2",
+      "group": "valid_fee",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.023
+    },
+    {
+      "case_id": "valid_fee-3",
+      "group": "valid_fee",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "valid_fee-4",
+      "group": "valid_fee",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "incorrect_fee-0",
+      "group": "incorrect_fee",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.019
+    },
+    {
+      "case_id": "incorrect_fee-1",
+      "group": "incorrect_fee",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.016
+    },
+    {
+      "case_id": "incorrect_fee-2",
+      "group": "incorrect_fee",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.015
+    },
+    {
+      "case_id": "incorrect_fee-3",
+      "group": "incorrect_fee",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.015
+    },
+    {
+      "case_id": "incorrect_fee-4",
+      "group": "incorrect_fee",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.019
+    },
+    {
+      "case_id": "valid_amendment-0",
+      "group": "valid_amendment",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.018
+    },
+    {
+      "case_id": "valid_amendment-1",
+      "group": "valid_amendment",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.015
+    },
+    {
+      "case_id": "valid_amendment-2",
+      "group": "valid_amendment",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "valid_amendment-3",
+      "group": "valid_amendment",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "valid_amendment-4",
+      "group": "valid_amendment",
+      "correct": true,
+      "actual_action": "close",
+      "expected_action": "close",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "missing_evidence-0",
+      "group": "missing_evidence",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.013
+    },
+    {
+      "case_id": "missing_evidence-1",
+      "group": "missing_evidence",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "missing_evidence-2",
+      "group": "missing_evidence",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.013
+    },
+    {
+      "case_id": "missing_evidence-3",
+      "group": "missing_evidence",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.013
+    },
+    {
+      "case_id": "missing_evidence-4",
+      "group": "missing_evidence",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.012
+    },
+    {
+      "case_id": "reference_ambiguity-0",
+      "group": "reference_ambiguity",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.007
+    },
+    {
+      "case_id": "reference_ambiguity-1",
+      "group": "reference_ambiguity",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.006
+    },
+    {
+      "case_id": "reference_ambiguity-2",
+      "group": "reference_ambiguity",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.006
+    },
+    {
+      "case_id": "reference_ambiguity-3",
+      "group": "reference_ambiguity",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.006
+    },
+    {
+      "case_id": "reference_ambiguity-4",
+      "group": "reference_ambiguity",
+      "correct": true,
+      "actual_action": "request_evidence",
+      "expected_action": "request_evidence",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.006
+    },
+    {
+      "case_id": "malicious_document-0",
+      "group": "malicious_document",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.015
+    },
+    {
+      "case_id": "malicious_document-1",
+      "group": "malicious_document",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "malicious_document-2",
+      "group": "malicious_document",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "malicious_document-3",
+      "group": "malicious_document",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    },
+    {
+      "case_id": "malicious_document-4",
+      "group": "malicious_document",
+      "correct": true,
+      "actual_action": "request_correction",
+      "expected_action": "request_correction",
+      "unsupported_resolution": false,
+      "unnecessary_escalation": false,
+      "citation_ids_valid": true,
+      "latency_ms": 0.014
+    }
+  ],
+  "baseline_comparison": [
+    {
+      "scenario": "incorrect",
+      "expected_action": "request_correction",
+      "expected_amount": 31500,
+      "rules_only": {
+        "access": "all structured records supplied; no retrieval",
+        "action": "request_correction",
+        "amount_minor": 31500,
+        "correct": true
+      },
+      "centralized_agent": {
+        "access": "all records supplied to one model; no retrieval",
+        "action": "request_evidence",
+        "amount_minor": 0,
+        "correct": false,
+        "model_calls": 1,
+        "cost_usd": 8.3e-05
+      },
+      "distributed_agent": {
+        "access": "nothing supplied; evidence retrieved over A2A from three isolated services",
+        "action": "request_correction",
+        "amount_minor": 31500,
+        "correct": true,
+        "status": "review",
+        "retrieval_completeness": 1.0,
+        "end_to_end_latency_ms": 4122.6,
+        "model_calls": 3,
+        "tool_calls": 4,
+        "cost_usd": 0.000177
+      }
+    },
+    {
+      "scenario": "valid",
+      "expected_action": "close",
+      "expected_amount": 0,
+      "rules_only": {
+        "access": "all structured records supplied; no retrieval",
+        "action": "close",
+        "amount_minor": 0,
+        "correct": true
+      },
+      "centralized_agent": {
+        "access": "all records supplied to one model; no retrieval",
+        "action": "close",
+        "amount_minor": 0,
+        "correct": true,
+        "model_calls": 1,
+        "cost_usd": 8.3e-05
+      },
+      "distributed_agent": {
+        "access": "nothing supplied; evidence retrieved over A2A from three isolated services",
+        "action": "close",
+        "amount_minor": 0,
+        "correct": true,
+        "status": "review",
+        "retrieval_completeness": 1.0,
+        "end_to_end_latency_ms": 3583.1,
+        "model_calls": 3,
+        "tool_calls": 4,
+        "cost_usd": 0.000172
+      }
+    },
+    {
+      "scenario": "missing",
+      "expected_action": "request_evidence",
+      "expected_amount": 0,
+      "rules_only": {
+        "access": "all structured records supplied; no retrieval",
+        "action": "request_evidence",
+        "amount_minor": 0,
+        "correct": true
+      },
+      "centralized_agent": {
+        "access": "all records supplied to one model; no retrieval",
+        "action": "close",
+        "amount_minor": 0,
+        "correct": false,
+        "model_calls": 1,
+        "cost_usd": 7.5e-05
+      },
+      "distributed_agent": {
+        "access": "nothing supplied; evidence retrieved over A2A from three isolated services",
+        "action": "request_evidence",
+        "amount_minor": 0,
+        "correct": true,
+        "status": "incomplete",
+        "retrieval_completeness": 1.0,
+        "end_to_end_latency_ms": 2551.5,
+        "model_calls": 2,
+        "tool_calls": 4,
+        "cost_usd": 0.000136
+      }
+    }
+  ]
+}
