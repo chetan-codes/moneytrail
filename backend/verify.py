@@ -4,6 +4,7 @@ Structured agreement metadata represents synthetic system attestations, not a cl
 that arbitrary contracts can be reliably interpreted without a model or human.
 """
 from __future__ import annotations
+import re
 from datetime import date, datetime
 
 ROLES = {'debit':'sender','instruction':'sender','invoice':'sender',
@@ -12,11 +13,25 @@ ROLES = {'debit':'sender','instruction':'sender','invoice':'sender',
 REQUIRED = ('debit','incoming','fee','settlement','credit')
 
 
+def cite(record, amount_minor):
+    """The sentence in the source stating this figure, so an approver can check the claim against the record."""
+    content=record.get('content')
+    if not isinstance(content,str):
+        return None
+    needle=f'USD {amount_minor/100:,.2f}'
+    for sentence in re.split(r'(?<=[.;:])\s+',content):
+        if needle in sentence:
+            return dict(evidence_id=record['id'],quote=sentence.strip(),value=needle)
+    return None
+
+
 def verify(records: list[dict]) -> dict:
     findings=[]
-    def finding(status,title,detail,items):
+    def finding(status,title,detail,items,citations=()):
         ids=list(dict.fromkeys(r['id'] for r in items if isinstance(r,dict) and isinstance(r.get('id'),str)))
-        findings.append(dict(id=f'finding:{len(findings)+1}',status=status,title=title,detail=detail,evidence_ids=ids))
+        # Only spans located verbatim in a source are cited; an absent figure yields no highlight rather than a guess.
+        found=[c for c in citations if c]
+        findings.append(dict(id=f'finding:{len(findings)+1}',status=status,title=title,detail=detail,evidence_ids=ids,citations=found))
     def unresolved(title,detail,items=()):
         finding('unresolved',title,detail,items)
         return dict(findings=findings,unsupported_minor=None,recommendation=dict(
@@ -61,7 +76,8 @@ def verify(records: list[dict]) -> dict:
     for kind,expected in [('instruction',amount(debit)),('invoice',amount(debit)),('allocation',amount(credit))]:
         if by_kind[kind] and amount(by_kind[kind][0])!=expected:
             return unresolved('Supporting record conflict',f'The {kind} amount conflicts with the observed payment trail.',by_kind[kind])
-    finding('verified','Money trail reconciles',f'{amount(debit)/100:,.2f} USD sent = {amount(credit)/100:,.2f} received + {amount(fee)/100:,.2f} deducted.',[debit,incoming,fee,settlement,credit])
+    finding('verified','Money trail reconciles',f'{amount(debit)/100:,.2f} USD sent = {amount(credit)/100:,.2f} received + {amount(fee)/100:,.2f} deducted.',[debit,incoming,fee,settlement,credit],
+        [cite(debit,amount(debit)),cite(fee,amount(fee)),cite(credit,amount(credit))])
     agreements=by_kind['agreement']
     if len(agreements)!=1:
         return unresolved('Agreement missing or ambiguous','Cannot verify the deduction without exactly one authoritative base agreement.',agreements)
@@ -90,12 +106,14 @@ def verify(records: list[dict]) -> dict:
     observed=amount(fee)
     ids=[r['id'] for r in [debit,incoming,fee,settlement,credit]+documents]
     if allowed==observed:
-        finding('verified','Deduction supported','The observed deduction matches the applicable structured agreement fee.',[fee,chosen])
+        finding('verified','Deduction supported','The observed deduction matches the applicable structured agreement fee.',[fee,chosen],
+            [cite(fee,observed),cite(chosen,allowed)])
         recommendation=dict(action='close',amount_minor=0,summary='The payment trail balances and the supplied agreement supports the deduction.',evidence_ids=ids)
         unsupported=0
     elif observed>allowed:
         unsupported=observed-allowed
-        finding('conflicting','Deduction exceeds agreement',f'Observed {observed/100:,.2f} USD; permitted {allowed/100:,.2f} USD; unsupported difference {unsupported/100:,.2f} USD.',[fee,chosen])
+        finding('conflicting','Deduction exceeds agreement',f'Observed {observed/100:,.2f} USD; permitted {allowed/100:,.2f} USD; unsupported difference {unsupported/100:,.2f} USD.',[fee,chosen],
+            [cite(fee,observed),cite(chosen,allowed)])
         recommendation=dict(action='request_correction',amount_minor=unsupported,summary=f'Request a {unsupported/100:,.2f} USD adjustment, subject to human review of the supplied evidence.',evidence_ids=ids)
     else:
         return unresolved('Deduction below agreement','The deduction is lower than the agreement fee. Request an explanation rather than infer an adjustment.',[fee,chosen])

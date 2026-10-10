@@ -8,6 +8,35 @@ from backend.data import generate, scenario_records, make_amendment
 from backend.verify import verify
 
 
+class CitationTests(unittest.TestCase):
+    def test_every_cited_span_is_verbatim_in_its_source(self):
+        for scenario in ('incorrect','valid','missing'):
+            records=scenario_records(scenario)
+            sources={r['id']:r.get('content') for r in records}
+            cited=0
+            for finding in verify(records)['findings']:
+                for citation in finding['citations']:
+                    self.assertIn(citation['evidence_id'],sources,scenario)
+                    self.assertIn(citation['quote'],sources[citation['evidence_id']],scenario)
+                    self.assertIn(citation['value'],citation['quote'],scenario)
+                    cited+=1
+            if scenario!='missing':
+                self.assertGreater(cited,0,scenario)
+
+    def test_citations_point_at_the_governing_figures(self):
+        records=scenario_records('incorrect')
+        conflict=[f for f in verify(records)['findings'] if f['title']=='Deduction exceeds agreement'][0]
+        by_id={c['evidence_id']:c for c in conflict['citations']}
+        self.assertEqual(by_id['incorrect:processor:fee']['value'],'USD 350.00')
+        self.assertEqual(by_id['incorrect:processor:agreement']['value'],'USD 35.00')
+
+    def test_record_without_the_figure_in_prose_is_not_cited(self):
+        records=scenario_records('incorrect')
+        reconciles=[f for f in verify(records)['findings'] if f['title']=='Money trail reconciles'][0]
+        # 'Sender bank debit' states no amount; inventing a span there would be a false citation.
+        self.assertNotIn('incorrect:sender:debit',[c['evidence_id'] for c in reconciles['citations']])
+
+
 class VerifierTests(unittest.TestCase):
     def test_three_scenarios(self):
         for scenario,action,amount in [('valid','close',0),('incorrect','request_correction',31500),('missing','request_evidence',0)]:
