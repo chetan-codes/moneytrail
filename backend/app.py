@@ -151,7 +151,7 @@ async def investigate(c):
 
 @app.get('/health')
 def health():
-    return dict(status='ok',**model.configuration(),mode='live' if model.configuration()['model_configured'] else 'deterministic',protocol='A2A 0.3.0 / official SDK 0.3.22',synthetic=True)
+    return dict(status='ok',**model.configuration(),mode='live' if model.configuration()['model_configured'] else 'deterministic',protocol='A2A 0.3.0 / official SDK 0.3.22',synthetic=True,speech_configured=os.getenv('ENABLE_WHISPER')=='true')
 
 @app.get('/overview')
 async def get_overview():

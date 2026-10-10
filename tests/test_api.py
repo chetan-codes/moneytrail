@@ -16,6 +16,16 @@ api = importlib.import_module('backend.app')
 org = importlib.import_module('backend.org_service')
 
 
+class ApprovalKeyFormatTests(unittest.TestCase):
+    def test_console_idempotency_key_format_is_accepted(self):
+        # The console derives the key from case id, version and action; a separator the
+        # backend pattern rejects made every approval fail from the UI while tests passed.
+        from backend.app import Approval
+        for action in ('close','request_correction','request_evidence'):
+            key=f'0f8b2c1a-4d3e-4f5a-9b7c-1e2d3f4a5b6c-3-{action}'
+            self.assertEqual(Approval(version=3,action=action,idempotency_key=key).idempotency_key,key)
+
+
 class CaseApiTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.tmp=tempfile.TemporaryDirectory()
