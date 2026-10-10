@@ -13,7 +13,8 @@ ORGANIZATIONS = ('sender', 'processor', 'recipient')
 def _record(scenario, organization, kind, title, amount=None, metadata=None, content=None):
     record = dict(id=f'{scenario}:{organization}:{kind}', organization=organization,
                   kind=kind, reference=REFERENCE, title=title,
-                  content=content or title, currency='USD', timestamp=PAYMENT_DATE+'T12:00:00Z',
+                  content=content or (f'{title}: USD {amount/100:,.2f} recorded against payment {REFERENCE}.' if amount is not None else title),
+                  currency='USD', timestamp=PAYMENT_DATE+'T12:00:00Z',
                   metadata=metadata or {})
     if amount is not None:
         record['amount_minor'] = amount

@@ -30,11 +30,20 @@ class CitationTests(unittest.TestCase):
         self.assertEqual(by_id['incorrect:processor:fee']['value'],'USD 350.00')
         self.assertEqual(by_id['incorrect:processor:agreement']['value'],'USD 35.00')
 
-    def test_record_without_the_figure_in_prose_is_not_cited(self):
+    def test_a_figure_absent_from_the_prose_is_never_cited(self):
+        from backend.verify import cite
+        # A span is only ever reported when it is found in the source; silence beats a guess.
+        self.assertIsNone(cite({'id':'x','content':'Sender bank debit'},1000000))
+        self.assertIsNone(cite({'id':'x','content':'Paid USD 99.00 elsewhere.'},1000000))
+        self.assertIsNone(cite({'id':'x','content':None},1000000))
+        found=cite({'id':'x','content':'Ledger shows USD 10,000.00 posted.'},1000000)
+        self.assertEqual(found['quote'],'Ledger shows USD 10,000.00 posted.')
+
+    def test_every_record_used_in_the_trail_is_cited(self):
         records=scenario_records('incorrect')
-        reconciles=[f for f in verify(records)['findings'] if f['title']=='Money trail reconciles'][0]
-        # 'Sender bank debit' states no amount; inventing a span there would be a false citation.
-        self.assertNotIn('incorrect:sender:debit',[c['evidence_id'] for c in reconciles['citations']])
+        cited={c['evidence_id'] for f in verify(records)['findings'] for c in f['citations']}
+        # Each node in the console must land on the line that states its figure.
+        self.assertEqual(cited,{r['id'] for r in records})
 
 
 class VerifierTests(unittest.TestCase):

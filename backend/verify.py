@@ -76,8 +76,9 @@ def verify(records: list[dict]) -> dict:
     for kind,expected in [('instruction',amount(debit)),('invoice',amount(debit)),('allocation',amount(credit))]:
         if by_kind[kind] and amount(by_kind[kind][0])!=expected:
             return unresolved('Supporting record conflict',f'The {kind} amount conflicts with the observed payment trail.',by_kind[kind])
+    checked=[debit,incoming,fee,settlement,credit]+[by_kind[k][0] for k in ('instruction','invoice','allocation') if by_kind[k]]
     finding('verified','Money trail reconciles',f'{amount(debit)/100:,.2f} USD sent = {amount(credit)/100:,.2f} received + {amount(fee)/100:,.2f} deducted.',[debit,incoming,fee,settlement,credit],
-        [cite(debit,amount(debit)),cite(fee,amount(fee)),cite(credit,amount(credit))])
+        [cite(r,amount(r)) for r in checked])
     agreements=by_kind['agreement']
     if len(agreements)!=1:
         return unresolved('Agreement missing or ambiguous','Cannot verify the deduction without exactly one authoritative base agreement.',agreements)
