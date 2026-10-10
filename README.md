@@ -72,6 +72,8 @@ Payment investigations are a documented operational problem — Swift's April 20
 
 ## Demo
 
+[**Watch the narrated walkthrough (93s)**](docs/demo.mp4) · silent loop below
+
 ![MoneyTrail investigation](docs/demo.gif)
 
 A recorded walkthrough of the real application: trace the payment, find the $315 the agreement does not support, then add a valid amendment and watch the recommendation be withdrawn. `docs/DEMO_SCRIPT.md` has the narration and the measured numbers behind every claim.
