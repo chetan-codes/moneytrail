@@ -69,3 +69,20 @@ Payment investigations are a documented operational problem — Swift's April 20
 - `frontend/` — React + TypeScript investigation console
 - `scripts/` — `run.py` (demo), `evaluate.py` (pilot), `compose_setup.py` (secrets)
 - `docs/CONTRACT.md` — the frozen shared contract
+
+## Demo
+
+![MoneyTrail investigation](docs/demo.gif)
+
+A recorded walkthrough of the real application: trace the payment, find the $315 the agreement does not support, then add a valid amendment and watch the recommendation be withdrawn. `docs/DEMO_SCRIPT.md` has the narration and the measured numbers behind every claim.
+
+## Measured results
+
+| | Deterministic verifier | One centralized model, same evidence |
+|---|---|---|
+| 30 held-out cases | **30/30** | 6/30 |
+| Unsupported resolutions | **0** | 19 |
+| Documents containing an injected instruction | **5/5 correct** | 0/5 — closes all five |
+| Live end-to-end investigation | 2.4–4.2 s, ~$0.0002 | — |
+
+The injection comparison is a matched pair: the same five cases, with and without one added paragraph. Without it the centralized model correctly asks for a correction five times out of five; with it, it closes all five. The deterministic verifier is unaffected either way.
