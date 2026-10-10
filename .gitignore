@@ -9,3 +9,4 @@ runtime/
 .DS_Store
 graphify-out/
 *.tsbuildinfo
+data/laya/
