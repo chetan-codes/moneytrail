@@ -1,0 +1,44 @@
+x-org: &org
+  build: .
+  command: ["uvicorn", "backend.org_service:app", "--host", "0.0.0.0", "--port", "8000"]
+  networks: [evidence]
+services:
+  sender:
+    <<: *org
+    environment:
+      ORG: sender
+      ORG_DB: /data/records.sqlite
+      ORG_SECRET: ${SENDER_SECRET:?Run scripts/compose_setup.py}
+      PUBLIC_URL: http://sender:8000/
+    volumes: ["./runtime/sender:/data"]
+  processor:
+    <<: *org
+    environment:
+      ORG: processor
+      ORG_DB: /data/records.sqlite
+      ORG_SECRET: ${PROCESSOR_SECRET:?Run scripts/compose_setup.py}
+      PUBLIC_URL: http://processor:8000/
+    volumes: ["./runtime/processor:/data"]
+  recipient:
+    <<: *org
+    environment:
+      ORG: recipient
+      ORG_DB: /data/records.sqlite
+      ORG_SECRET: ${RECIPIENT_SECRET:?Run scripts/compose_setup.py}
+      PUBLIC_URL: http://recipient:8000/
+    volumes: ["./runtime/recipient:/data"]
+  coordinator:
+    build: .
+    env_file: .env
+    environment:
+      SENDER_URL: http://sender:8000/
+      PROCESSOR_URL: http://processor:8000/
+      RECIPIENT_URL: http://recipient:8000/
+      STATE_DIR: /state
+    volumes: ["./runtime/coordinator:/state"]
+    ports: ["127.0.0.1:8000:8000"]
+    networks: [evidence, inference]
+networks:
+  evidence:
+    internal: true
+  inference: {}
