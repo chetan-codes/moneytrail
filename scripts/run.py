@@ -32,6 +32,10 @@ try:
     env={**base,'STATE_DIR':str(ROOT/'runtime/coordinator'),**{org.upper()+'_SECRET':value for org,value in secrets_by_org.items()}}
     processes.append(subprocess.Popen([sys.executable,'-m','uvicorn','backend.app:app','--host','127.0.0.1','--port','8000'],env=env))
     if not args.no_frontend:
+        # Vite 6 needs Node 18+; on an older one it dies with an unrelated crypto error.
+        node=subprocess.run(['node','-v'],capture_output=True,text=True).stdout.strip()
+        if int(node.lstrip('v').split('.')[0] or 0)<18:
+            raise SystemExit(f'Node {node} is too old for the dashboard; Vite needs 18+. Run `nvm use 22` (or omit --no-frontend).')
         processes.append(subprocess.Popen(['npm','run','dev','--','--host','127.0.0.1'],cwd=ROOT/'frontend',env=base))
     print('\nMoneyTrail: http://127.0.0.1:5173 | API: http://127.0.0.1:8000/docs\nSynthetic organizations. Local processes share OS-user privileges; use Compose for mount isolation.\n',flush=True)
     while all(p.poll() is None for p in processes):time.sleep(.5)
