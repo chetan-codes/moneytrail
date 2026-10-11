@@ -81,14 +81,37 @@ split and 0.511 — chance — on real contracts. That 0.979 was an artefact of 
 not evidence of skill, and the same caution applies to the tuned model's 1.000. **Quote the
 real-data numbers, never the synthetic ones.**
 
+## Three detectors, identical real data
+
+0.77 AUC is not a good number, so the question is whether any model earns its place here.
+Same pairs, same three positions, measured in one run (`jobs/injection_shootout_job.py`):
+
+| Detector | appended | prepended | embedded | mean AUC | latency |
+|---|---|---|---|---|---|
+| 27 regexes, no model | 0.705 | 0.705 | 0.705 | 0.705 | 0.1 ms |
+| **Ours** (Laya 421M, fine-tuned on MoneyTrail prose) | 0.722 | 0.766 | 0.718 | **0.735** | 29 ms |
+| [protectai/deberta-v3-base-prompt-injection-v2](https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2) (184M, 698k downloads) | 0.675 | 0.642 | 0.662 | 0.660 | 21 ms |
+
+We expected the purpose-built detector to win and to retire our checkpoint. It came last,
+below a list of regexes.
+
+The reading is that **indirect injection is not prompt injection**. ProtectAI is trained on
+user prompts sent to a model, where the attack is most of the input. Here the attack is two
+sentences inside a 900-character contract clause, and the detector mostly sees contract text
+and says SAFE. A general injection classifier does not transfer to attacks embedded in
+documents.
+
+The honest summary of the whole exercise: nobody is good at this. The best of three is 0.735,
+a domain fine-tune beating `grep` by 0.03. That is a finding about the task, not a product.
+
 ## What this is, and is not
 
 It is a self-hosted, sub-second (67 ms median, CPU) screen that is measurably better than
 chance at spotting an instruction hidden in a real contract, trained in under a minute on
 synthetic data for pennies.
 
-It is not a gate. At AUC 0.72 and accuracy 0.72 it is wrong on roughly one real document in
-four. It belongs where a wrong answer costs attention rather than money: raising a flag on an
+It is not a gate, and neither is anything else available. At AUC 0.735 it is wrong on roughly
+one real document in four, and the best off-the-shelf alternative is worse. It belongs where a wrong answer costs attention rather than money: raising a flag on an
 evidence card for a human to look at. It must never auto-reject a document, and it changes
 nothing about who decides a disposition — the deterministic verifier still does that, and it
 already neutralises the injection regardless of what any model thinks.

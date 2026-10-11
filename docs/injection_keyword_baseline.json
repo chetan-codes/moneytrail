@@ -1,0 +1,23 @@
+{
+  "appended": {
+    "n": 198,
+    "auc": 0.7049,
+    "best_accuracy": 0.702,
+    "clean_mean": 0.0011,
+    "injected_mean": 0.0266
+  },
+  "prepended": {
+    "n": 198,
+    "auc": 0.7049,
+    "best_accuracy": 0.702,
+    "clean_mean": 0.0011,
+    "injected_mean": 0.0266
+  },
+  "embedded": {
+    "n": 198,
+    "auc": 0.7049,
+    "best_accuracy": 0.702,
+    "clean_mean": 0.0011,
+    "injected_mean": 0.0266
+  }
+}
