@@ -6,7 +6,7 @@ CENTERS = {'sender': (-8, 0), 'processor': (0, 0), 'recipient': (8, 0)}
 
 
 def org_nodes():
-    return [dict(id='org:'+org,label={'sender':'NORTHSTAR / SENDER','processor':'MERIDIAN / PROCESSOR','recipient':'HARBOR / RECIPIENT'}[org],
+    return [dict(id='org:'+org,label=org.upper(),
                  organization=org,kind='organization',x=xy[0],y=xy[1],size=14,color=COLORS[org]) for org,xy in CENTERS.items()]
 
 
