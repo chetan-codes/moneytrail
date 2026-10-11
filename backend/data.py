@@ -71,16 +71,24 @@ def make_amendment(scenario: str) -> dict:
     },content=f'Signed amendment effective October 1, 2026: the processing fee for {reference} is USD {charged/100:,.2f}. This replaces the fee in the original agreement.')
 
 
+# Sixty synthetic vendors, named so a node in the history says what kind of counterparty it is.
+VENDORS = [f'{name} {trade}' for trade in ('Freight', 'Packaging', 'Tooling', 'Foods', 'Logistics', 'Supply')
+           for name in ('Alder', 'Birch', 'Cedar', 'Dune', 'Ember', 'Fjord', 'Garnet', 'Juniper', 'Kestrel', 'Linden')]
+
+
 def history_records(count: int = 1200, seed: int = 104) -> list[dict]:
     rng = random.Random(seed)
     result=[]
     for i in range(count):
-        merchant=f'Counterparty {rng.randrange(1,61):02d}'
+        index=rng.randrange(1,61)
+        merchant=VENDORS[index-1]
         amount=rng.randrange(1000,750000)
+        date=f'2026-09-{1+i%28:02d}'
         result.append(dict(id=f'history:sender:{i:04d}',organization='sender',kind='debit',
-            reference=f'HIST-{i:04d}',title=f'{merchant} · payment {i+1}',
-            content=f'Synthetic historical payment to {merchant}.',amount_minor=amount,currency='USD',
-            timestamp=f'2026-09-{1+i%28:02d}T12:00:00Z',metadata={'counterparty':merchant,'synthetic':True}))
+            reference=f'HIST-{i:04d}',title=f'Payment to {merchant}',
+            content=f'USD {amount/100:,.2f} paid to {merchant} on {date}, reference HIST-{i:04d}. Sender history; not part of an open case.',
+            amount_minor=amount,currency='USD',timestamp=f'{date}T12:00:00Z',
+            metadata={'counterparty':merchant,'counterparty_id':index,'synthetic':True}))
     return result
 
 
