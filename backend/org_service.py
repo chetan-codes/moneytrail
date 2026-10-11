@@ -74,7 +74,7 @@ def handle(payload):
             receipt = {'organization': ORG, 'receipt_id': 'REQ-' + key, 'status': 'requested',
                        'amount_minor': amount, 'currency': 'USD', 'case_id': case_id,
                        'timestamp': datetime.now(timezone.utc).isoformat(),
-                       'message': 'Correction request received by simulated processor. Not accepted or settled.'}
+                       'message': 'Correction request received by the processor. Not yet accepted or settled.'}
             con.execute('INSERT INTO corrections VALUES (?,?,?,?,?)', (key, case_id, version, amount, json.dumps(receipt)))
             return receipt
         raise ValueError('Unknown operation')

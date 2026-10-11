@@ -1,8 +1,8 @@
 # MoneyTrail
 
-**Three companies. Three versions of the truth. One investigation you can verify.**
+**Find the missing money. Prove where it went.**
 
-$10,000 sent. $9,650 received. Three organizations, each holding its own records, none able to read the others'. MoneyTrail locates the deduction, checks it against the governing agreement, and proposes a disposition a human approves.
+When a payment arrives short, every company involved holds part of the explanation and none can read the others' records. In the demo case $10,000 is sent and $9,650 arrives, with three organizations in between. MoneyTrail locates the deduction, checks it against the governing agreement, and proposes a disposition a human approves.
 
 Finding the money is the first step. Checking the explanation is the important one.
 
