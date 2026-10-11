@@ -30,7 +30,7 @@ if __name__ == '__main__':
     base = snapshot_download('convaiinnovations/laya', allow_patterns=['model.safetensors', 'encoder/*', 'tokenizer/*', 'rl_agent_config.json'])
     config = TrainConfig(epochs=args.epochs, micro_batch=8, grad_accum=4,
                          freeze_encoder=args.freeze_encoder, seed=104,
-                         eval_data=str(args.eval_data), log_every=25)
+                         eval_data=str(args.eval_data), log_every=2)
     start = time.time()
     summary = finetune(str(args.data), base, str(args.out), config=config, device=args.device)
     summary['wall_seconds'] = round(time.time() - start, 1)
