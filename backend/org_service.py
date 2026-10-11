@@ -14,6 +14,7 @@ from a2a.types import AgentCard, AgentCapabilities, AgentSkill, DataPart, Part
 from a2a.utils import new_agent_parts_message
 from starlette.responses import JSONResponse
 from .security import validate
+from .data import SCENARIOS, make_amendment
 
 ORG = os.environ.get('ORG', 'sender')
 DB = Path(os.environ.get('ORG_DB', f'runtime/{ORG}/records.sqlite'))
@@ -31,7 +32,7 @@ def connect():
 def handle(payload):
     operation = payload.get('operation')
     scenario = payload.get('scenario')
-    if scenario not in ('incorrect', 'valid', 'missing') or payload.get('reference') != 'PAY-104':
+    if scenario not in SCENARIOS or payload.get('reference') != SCENARIOS[scenario][0]:
         raise ValueError('Request outside authorized demo reference')
     case_id = payload.get('case_id', '')
     if not case_id or len(case_id) > 100:
@@ -58,13 +59,12 @@ def handle(payload):
         if ORG != 'processor':
             raise ValueError('Organization does not provide this skill')
         if operation == 'amend':
-            from .data import make_amendment
             record = make_amendment(scenario)
             con.execute('INSERT OR REPLACE INTO amendments VALUES (?,?)', (case_id, json.dumps(record)))
             return {'organization': ORG, 'records': [record]}
         if operation == 'correction':
             amount, version, key = payload.get('amount_minor'), payload.get('version'), payload.get('idempotency_key')
-            if type(amount) is not int or not 0 < amount <= 35000 or type(version) is not int or not key:
+            if type(amount) is not int or not 0 < amount <= SCENARIOS[scenario][2] or type(version) is not int or not key:
                 raise ValueError('Invalid correction request')
             existing = con.execute('SELECT case_id,version,amount,receipt FROM corrections WHERE key=?', (key,)).fetchone()
             if existing:

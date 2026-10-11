@@ -2,7 +2,7 @@
 
 Backend Python package `backend`. Frontend React+TS/Vite in `frontend`. API port 8000; organization ports sender 8101, processor 8102, recipient 8103.
 
-Money is integer USD cents. Synthetic payment reference `PAY-104`. Scenarios `incorrect`, `valid`, `missing`. All timestamps ISO strings.
+Money is integer USD cents. Synthetic payment references `PAY-104` and `PAY-221`; a case carries its own `reference`, and every request and returned record is scoped to it. Scenarios `incorrect`, `valid`, `missing`, `injected`, `wire`, `duplicate` (`backend/data.py` `SCENARIOS`). All timestamps ISO strings.
 
 Evidence JSON: `{id, organization, kind, reference, title, content, amount_minor?, currency:'USD', timestamp, metadata:{...}}`. Kinds `debit`, `invoice`, `instruction`, `incoming`, `fee`, `settlement`, `agreement`, `amendment`, `credit`, `allocation`. Agreement metadata `{fee_minor,effective_date,issuer,authorized:true}`. Metadata fields are authoritative synthetic system fields; prose extraction still evaluated separately. Conflicting/missing fields escalate.
 

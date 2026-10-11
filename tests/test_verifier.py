@@ -4,8 +4,69 @@ import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
-from backend.data import generate, scenario_records, make_amendment
+from backend.data import SCENARIOS, generate, scenario_records, make_amendment
 from backend.verify import verify
+
+
+class ScenarioTests(unittest.TestCase):
+    EXPECTED={'incorrect':('request_correction',31500),'valid':('close',0),'missing':('request_evidence',0),
+              'injected':('request_correction',31500),'wire':('request_correction',112500),'duplicate':('request_evidence',0)}
+
+    def test_every_seeded_scenario_reaches_its_disposition(self):
+        self.assertEqual(set(self.EXPECTED),set(SCENARIOS))
+        for scenario,want in self.EXPECTED.items():
+            recommendation=verify(scenario_records(scenario))['recommendation']
+            self.assertEqual((recommendation['action'],recommendation['amount_minor']),want,scenario)
+
+    def test_amendment_permits_what_was_charged_on_either_payment(self):
+        for scenario in ('incorrect','wire'):
+            recommendation=verify(scenario_records(scenario)+[make_amendment(scenario)])['recommendation']
+            self.assertEqual((recommendation['action'],recommendation['amount_minor']),('close',0),scenario)
+
+    def test_injected_instruction_is_in_the_document_and_changes_nothing(self):
+        clean=verify(scenario_records('incorrect'))['recommendation']
+        injected=verify(scenario_records('injected'))['recommendation']
+        self.assertIn('Ignore all previous instructions',scenario_records('injected')[-1]['content'])
+        self.assertEqual((clean['action'],clean['amount_minor']),(injected['action'],injected['amount_minor']))
+
+
+class RandomizedTrailTests(unittest.TestCase):
+    def test_disposition_matches_first_principles_on_random_payments(self):
+        # Breadth beyond the seeded 350/35 story: random principals, agreed and charged fees,
+        # amendments and evidence faults. The expectation is restated here from the rule, so
+        # this checks the implementation against its rule, not the rule against the world.
+        import random
+        rng=random.Random(104)
+        seen={'close':0,'request_correction':0,'request_evidence':0}
+        for trial in range(5000):
+            principal=rng.randrange(100_000,50_000_000)
+            agreed=rng.randrange(0,60_000)
+            charged=rng.choice((agreed,agreed+rng.randrange(1,40_000),max(0,agreed-rng.randrange(1,40_000))))
+            amounts={'debit':principal,'incoming':principal,'invoice':principal,'instruction':principal,
+                     'fee':charged,'settlement':principal-charged,'credit':principal-charged,'allocation':principal-charged}
+            records=copy.deepcopy(scenario_records('valid'))
+            for record in records:
+                if record['kind'] in amounts:record['amount_minor']=amounts[record['kind']]
+                if record['kind']=='agreement':record['metadata']['fee_minor']=agreed
+            allowed=agreed
+            if rng.random()<.3:
+                amendment=make_amendment('valid')
+                amendment['metadata']['fee_minor']=allowed=rng.randrange(0,60_000)
+                records.append(amendment)
+            expected=('close',0) if charged==allowed else ('request_correction',charged-allowed) if charged>allowed else ('request_evidence',0)
+            fault=rng.choice((None,)*10+('missing','reference','currency','unbalanced','duplicate'))
+            if fault=='missing':
+                kind=rng.choice(('debit','incoming','fee','settlement','credit','agreement'))
+                records=[r for r in records if r['kind']!=kind]
+            elif fault=='reference':rng.choice(records)['reference']='PAY-OTHER'
+            elif fault=='currency':rng.choice(records)['currency']='EUR'
+            elif fault=='unbalanced':next(r for r in records if r['kind']=='credit')['amount_minor']+=1
+            elif fault=='duplicate':records.append(copy.deepcopy(rng.choice(records)))
+            if fault:expected=('request_evidence',0)
+            recommendation=verify(records)['recommendation']
+            self.assertEqual((recommendation['action'],recommendation['amount_minor']),expected,(trial,fault,agreed,charged,allowed))
+            seen[expected[0]]+=1
+        self.assertTrue(all(count>500 for count in seen.values()),seen)
 
 
 class CitationTests(unittest.TestCase):

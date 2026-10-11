@@ -70,9 +70,15 @@ class CaseApiTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_three_demo_cases_three_rehearsals(self):
         for _ in range(3):
-            for scenario,action in [('incorrect','request_correction'),('valid','close'),('missing','request_evidence')]:
+            for scenario,action in [('incorrect','request_correction'),('valid','close'),('missing','request_evidence'),
+                                    ('injected','request_correction'),('wire','request_correction'),('duplicate','request_evidence')]:
                 case=await self.create(scenario)
                 self.assertEqual(case['recommendation']['action'],action)
+                # The headline figures come from the case's own payment, not from one hard-coded story.
+                self.assertEqual(case['sent_minor']-case['received_minor'],case['difference_minor'])
+                self.assertTrue(all(r['reference']==case['reference'] for r in case['records']))
+                if scenario=='wire':
+                    self.assertEqual((case['reference'],case['sent_minor'],case['recommendation']['amount_minor']),('PAY-221',4820000,112500))
                 self.assertEqual(case['mode'],'deterministic')
                 known={r['id'] for r in case['records']}
                 evidence_nodes=[n for n in case['graph']['nodes'] if n.get('evidence_id')]
@@ -187,6 +193,20 @@ class CapabilityTests(unittest.TestCase):
                 org.handle({**self.payload,'operation':'amend'})
                 unrelated=org.handle({**self.payload,'case_id':'another-case'})
                 self.assertFalse(any(r['kind']=='amendment' for r in unrelated['records']))
+
+
+class SecondPaymentTests(unittest.TestCase):
+    def test_second_payment_is_scoped_and_capped_by_its_own_fee(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);generate(root)
+            wire={'operation':'retrieve','case_id':'case-2','scenario':'wire','reference':'PAY-221','kind':'all'}
+            with patch.object(org,'ORG','processor'),patch.object(org,'DB',root/'processor'/'records.sqlite'):
+                self.assertTrue(all(r['reference']=='PAY-221' for r in org.handle(wire)['records']))
+                with self.assertRaises(ValueError):org.handle({**wire,'reference':'PAY-104'})
+                correction={**wire,'operation':'correction','version':1,'idempotency_key':'key-2'}
+                self.assertEqual(org.handle({**correction,'amount_minor':112500})['status'],'requested')
+                # No correction may exceed what was actually deducted from that payment.
+                with self.assertRaises(ValueError):org.handle({**correction,'amount_minor':125001,'idempotency_key':'key-3'})
 
 
 class OrganizationMiddlewareTests(unittest.IsolatedAsyncioTestCase):

@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from . import transport, model
+from .data import SCENARIOS
 from .graph import org_nodes, evidence_node, overview
 from .verify import verify
 
@@ -25,7 +26,7 @@ STATE=Path(os.getenv('STATE_DIR','runtime/coordinator'))
 
 
 class NewCase(BaseModel):
-    scenario: Literal['incorrect','valid','missing']='incorrect'
+    scenario: Literal['incorrect','valid','missing','injected','wire','duplicate']='incorrect'
     question: str=Field(default='Find the missing money and verify the deduction.',max_length=2000)
     mode: Literal['deterministic','live']='deterministic'
 class Amendment(BaseModel):
@@ -56,8 +57,10 @@ def emit(c, type, message, data=None):
 
 
 def new_case(body):
-    c=dict(id=str(uuid.uuid4()),version=1,scenario=body.scenario,status='created',mode=body.mode,
-           question=body.question,sent_minor=1000000,received_minor=965000,difference_minor=35000,
+    # What the sender knows when it opens a case: the payment, what it sent, and what the recipient says arrived.
+    reference,principal,charged,_=SCENARIOS[body.scenario]
+    c=dict(id=str(uuid.uuid4()),version=1,scenario=body.scenario,status='created',mode=body.mode,reference=reference,
+           question=body.question,sent_minor=principal,received_minor=principal-charged,difference_minor=charged,
            unsupported_minor=None,records=[],findings=[],recommendation=None,events=[],
            graph=dict(nodes=org_nodes(),edges=[]),metrics=dict(model_calls=0,tool_calls=0),approval=None)
     CASES[c['id']]=c; LOCKS[c['id']]=asyncio.Lock()
@@ -65,7 +68,7 @@ def new_case(body):
 
 
 def payload(c,operation,**kwargs):
-    return dict(operation=operation,case_id=c['id'],scenario=c['scenario'],reference='PAY-104',version=c['version'],**kwargs)
+    return dict(operation=operation,case_id=c['id'],scenario=c['scenario'],reference=c['reference'],version=c['version'],**kwargs)
 
 
 async def ask(c,org,kind='all'):
@@ -76,7 +79,7 @@ async def ask(c,org,kind='all'):
     emit(c,'request',f'Manager requested {kind} evidence from {org}.',{'organization':org,'edges':[edge] if org!='sender' else []})
     result=await transport.request(org,payload(c,'retrieve',kind=kind))
     for record in result.get('records',[]):
-        if record['organization']!=org or record['reference']!='PAY-104': raise RuntimeError('Evidence outside request scope')
+        if record['organization']!=org or record['reference']!=c['reference']: raise RuntimeError('Evidence outside request scope')
         if any(r['id']==record['id'] for r in c['records']): continue
         c['records'].append(record)
         node=evidence_node(record,len([r for r in c['records'] if r['organization']==org]))
@@ -91,7 +94,7 @@ async def investigate(c):
     c['status']='investigating'; emit(c,'status','Investigation opened. Organizations retain separate records.',{'status':'investigating'})
     try:
         if c['mode']=='live':
-            tool={'type':'function','function':{'name':'request_evidence','description':'Request scoped PAY-104 evidence from an organization.','parameters':{'type':'object','properties':{'organization':{'type':'string','enum':['sender','processor','recipient']},'kind':{'type':'string','enum':['movements','documents','all']}},'required':['organization','kind'],'additionalProperties':False}}}
+            tool={'type':'function','function':{'name':'request_evidence','description':f'Request scoped {c["reference"]} evidence from an organization.','parameters':{'type':'object','properties':{'organization':{'type':'string','enum':['sender','processor','recipient']},'kind':{'type':'string','enum':['movements','documents','all']}},'required':['organization','kind'],'additionalProperties':False}}}
             visited=set()
             for step in range(6):
                 required={('sender','movements'),('processor','movements'),('recipient','movements'),('processor','documents')}
@@ -130,7 +133,7 @@ async def investigate(c):
             emit(c,'finding',finding['title'],{'finding':finding})
         recommendation=result['recommendation']
         if c['mode']=='live':
-            response=model.decode(await model.complete('resolution reviewer',json.dumps({'task':'Return action, amount_minor, summary, evidence_ids. Respect verifier result, do not authorize execution. Identify the supported resolution, or request_evidence when incomplete.','verified':result,'records':c['records']}),c['metrics']))
+            response=model.decode(await model.complete('resolution reviewer',json.dumps({'task':'Return action, amount_minor, summary, evidence_ids. amount_minor is the unsupported amount to be corrected in integer USD cents: it is 0 unless the action is request_correction. Respect verifier result, do not authorize execution. Identify the supported resolution, or request_evidence when incomplete.','verified':result,'records':c['records']}),c['metrics']))
             known={r['id'] for r in c['records']}
             if response.get('action')!=recommendation['action'] or response.get('amount_minor')!=recommendation['amount_minor'] or not set(response.get('evidence_ids',[])).issubset(known):
                 raise RuntimeError('Resolution reviewer conflicts with deterministic verification')
