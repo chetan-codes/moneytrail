@@ -53,9 +53,10 @@ Hold on the resolution card and give the measured comparison:
 
 | Claim | Value |
 |---|---|
-| Live investigation, end to end | 2.4–4.2 s |
+| Live investigation, end to end | 3–5 s (median 3.7 s over 200 runs) |
 | Cost per live investigation | about $0.0002 |
-| Six cases, approvals and amendment twists, live | 22/22 |
+| Six cases, approvals and amendment twists, live, ten rounds | 110/110 |
+| 120 random payments, live, 20 with an injected note | 110 correct, 10 stopped for a human, 0 wrong |
 | Deterministic verifier, 30 held-out cases | 30/30, 0 unsupported resolutions |
 | Single centralized model, same 30 cases | 9/30, 18 unsupported resolutions |
 | Deterministic verifier, 5,000 random payments | 5,000/5,000 against a first-principles oracle |

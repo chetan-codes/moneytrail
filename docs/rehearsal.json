@@ -1,0 +1,86 @@
+{
+  "mode": "live",
+  "rounds": 10,
+  "checks": 110,
+  "passed": 110,
+  "agents": [
+    {
+      "agent": "manager: evidence requests",
+      "right": 320,
+      "of": 320,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 1.361,
+      "slowest_seconds": 1.532
+    },
+    {
+      "agent": "processor service: records returned",
+      "right": 340,
+      "of": 340,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 0.012,
+      "slowest_seconds": 0.08
+    },
+    {
+      "agent": "recipient service: records returned",
+      "right": 160,
+      "of": 160,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 0.009,
+      "slowest_seconds": 0.065
+    },
+    {
+      "agent": "sender service: records returned",
+      "right": 240,
+      "of": 240,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 0.009,
+      "slowest_seconds": 0.08
+    },
+    {
+      "agent": "document reader: clean documents",
+      "right": 80,
+      "of": 80,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 1.057,
+      "slowest_seconds": 1.432
+    },
+    {
+      "agent": "document reader: injected documents",
+      "right": 10,
+      "of": 10,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 1.048,
+      "slowest_seconds": 1.097
+    },
+    {
+      "agent": "reviewer: agrees with the checked result",
+      "right": 80,
+      "of": 80,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 1.183,
+      "slowest_seconds": 1.515
+    },
+    {
+      "agent": "whole system: final answer",
+      "right": 80,
+      "of": 80,
+      "extra": 0,
+      "missed": 0,
+      "median_seconds": 3.656,
+      "slowest_seconds": 5.119
+    }
+  ],
+  "outcomes": {
+    "should close -> closed": 30,
+    "should flag -> flagged": 50
+  },
+  "false_positives": 0,
+  "false_negatives": 0
+}
