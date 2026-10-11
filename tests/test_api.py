@@ -155,6 +155,34 @@ class CaseApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.requests,[])
         self.assertTrue(any(e['type']=='error' for e in case['events']))
 
+    async def test_a_wrong_agent_stops_the_case_instead_of_deciding(self):
+        # A scripted model plays all three roles correctly, then gets one role wrong at a time.
+        agreement=next(r for r in scenario_records('incorrect') if r['kind']=='agreement')
+        def scripted(wrong):
+            async def complete(role,prompt,metrics,tools=None):
+                task=json.loads(prompt)
+                if role=='manager':
+                    return {'tool_calls':[] if wrong==role else [{'function':{'name':'request_evidence','arguments':json.dumps(pair)}} for pair in task['still_needed']]}
+                if role=='document verifier':
+                    answer=dict(fee_minor=35000 if wrong==role else agreement['metadata']['fee_minor'],effective_date=agreement['metadata']['effective_date'],quote=agreement['content'][:20])
+                else:
+                    answer=dict(action='close',amount_minor=0,evidence_ids=[]) if wrong==role else dict(task['verified']['recommendation'],evidence_ids=[])
+                return {'content':json.dumps(answer)}
+            return complete
+        for wrong in (None,'manager','document verifier','resolution reviewer'):
+            with self.subTest(wrong=wrong),patch.object(api.model,'configuration',return_value={'model_configured':True}),patch.object(api.model,'complete',new=scripted(wrong)):
+                cid=(await self.client.post('/cases',json={'scenario':'incorrect','mode':'live'})).json()['id'];await api.TASKS[cid]
+                case=(await self.client.get('/cases/'+cid)).json()
+                approval=await self.client.post(f'/cases/{cid}/approve',json={'version':1,'action':'request_correction','idempotency_key':'k-'+cid})
+                if wrong is None:
+                    self.assertEqual((case['recommendation']['action'],case['recommendation']['amount_minor']),('request_correction',31500))
+                    self.assertEqual(approval.status_code,200)
+                else:
+                    self.assertEqual(case['status'],'incomplete');self.assertIsNone(case['recommendation'])
+                    self.assertTrue(any(e['type']=='error' for e in case['events']))
+                    self.assertEqual(approval.status_code,409)
+        self.assertEqual(len(self.corrections),1)
+
 
 class CapabilityTests(unittest.TestCase):
     def setUp(self):
