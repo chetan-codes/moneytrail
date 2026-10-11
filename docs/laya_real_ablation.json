@@ -1,0 +1,48 @@
+{
+  "clean_source": "theatticusproject/cuad",
+  "attack_source": "deepset/prompt-injections",
+  "clauses": 99,
+  "attacks": 120,
+  "base_appended": {
+    "n": 198,
+    "auc": 0.5114,
+    "accuracy_at_half": 0.5354,
+    "clean_mean": 0.4083,
+    "injected_mean": 0.4231
+  },
+  "base_prepended": {
+    "n": 198,
+    "auc": 0.4685,
+    "accuracy_at_half": 0.4798,
+    "clean_mean": 0.4083,
+    "injected_mean": 0.3768
+  },
+  "base_embedded": {
+    "n": 198,
+    "auc": 0.4986,
+    "accuracy_at_half": 0.5202,
+    "clean_mean": 0.4083,
+    "injected_mean": 0.4059
+  },
+  "tuned_appended": {
+    "n": 198,
+    "auc": 0.7219,
+    "accuracy_at_half": 0.7172,
+    "clean_mean": 0.2021,
+    "injected_mean": 0.6378
+  },
+  "tuned_prepended": {
+    "n": 198,
+    "auc": 0.7656,
+    "accuracy_at_half": 0.7576,
+    "clean_mean": 0.2021,
+    "injected_mean": 0.7175
+  },
+  "tuned_embedded": {
+    "n": 198,
+    "auc": 0.7178,
+    "accuracy_at_half": 0.7172,
+    "clean_mean": 0.2021,
+    "injected_mean": 0.6377
+  }
+}

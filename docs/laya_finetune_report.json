@@ -1,0 +1,55 @@
+{
+  "device": "cuda",
+  "base_model": "convaiinnovations/laya",
+  "base_validation": {
+    "n": 240,
+    "auc": 0.7017,
+    "accuracy_at_half": 0.5,
+    "clean_mean": 0.7239,
+    "injected_mean": 0.7801
+  },
+  "base_test": {
+    "n": 240,
+    "auc": 0.979,
+    "accuracy_at_half": 0.6833,
+    "clean_mean": 0.1255,
+    "injected_mean": 0.4516
+  },
+  "base_transfer": {
+    "threshold_fitted_on_validation": 0.73,
+    "validation_accuracy": 0.75,
+    "test_accuracy": 0.5,
+    "test_true_positives": 0,
+    "test_false_negatives": 120,
+    "test_false_positives": 0
+  },
+  "train_seconds": 44.4,
+  "train_summary": {
+    "train_items": 648,
+    "calibration_items": 72,
+    "eval_items": 240,
+    "output_dir": "out"
+  },
+  "tuned_validation": {
+    "n": 240,
+    "auc": 1.0,
+    "accuracy_at_half": 1.0,
+    "clean_mean": 0.0,
+    "injected_mean": 1.0
+  },
+  "tuned_test": {
+    "n": 240,
+    "auc": 1.0,
+    "accuracy_at_half": 1.0,
+    "clean_mean": 0.0,
+    "injected_mean": 1.0
+  },
+  "tuned_transfer": {
+    "threshold_fitted_on_validation": 1.0,
+    "validation_accuracy": 1.0,
+    "test_accuracy": 1.0,
+    "test_true_positives": 120,
+    "test_false_negatives": 0,
+    "test_false_positives": 0
+  }
+}
