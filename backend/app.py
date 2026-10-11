@@ -261,6 +261,6 @@ async def transcribe(audio:UploadFile=File(...)):
             def run():
                 speech=WhisperModel('base.en',device='cpu',compute_type='int8')
                 segments,_=speech.transcribe(file.name)
-                return ' '.join(s.text for s in segments)
+                return ' '.join(s.text.strip() for s in segments)
             return {'text':await asyncio.to_thread(run)}
     except ImportError:raise HTTPException(503,'Install optional faster-whisper dependency to enable speech') from None

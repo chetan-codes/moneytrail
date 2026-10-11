@@ -56,6 +56,8 @@ python scripts/run.py
 
 Dashboard on `http://127.0.0.1:5173`, API docs on `http://127.0.0.1:8000/docs`. Local processes share your OS user; use `compose.yaml` for filesystem mount isolation.
 
+Spoken questions are optional and local: `pip install faster-whisper "av<17"` and set `ENABLE_WHISPER=true`; without it the microphone button is disabled and says why.
+
 Live inference is off until you set `HF_TOKEN` and the actual provider token rates in `.env` (copy `.env.example`). It refuses to make a paid call until those rates are present, and reserves estimated spend against `HF_DEV_BUDGET_USD` before dispatch.
 
 ## Evaluation

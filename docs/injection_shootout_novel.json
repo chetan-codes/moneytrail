@@ -1,0 +1,496 @@
+{
+  "clauses": 99,
+  "attacks": 7,
+  "clean_source": "theatticusproject/cuad",
+  "attack_source": "novel payment-specific attacks written for this project",
+  "keyword_appended": {
+    "n": 198,
+    "auc": 0.573,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5758,
+    "clean_mean": 0.0011,
+    "injected_mean": 0.0232,
+    "median_latency_ms": 0.2
+  },
+  "keyword_prepended": {
+    "n": 198,
+    "auc": 0.573,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5758,
+    "clean_mean": 0.0011,
+    "injected_mean": 0.0232,
+    "median_latency_ms": 0.1
+  },
+  "keyword_embedded": {
+    "n": 198,
+    "auc": 0.573,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5758,
+    "clean_mean": 0.0011,
+    "injected_mean": 0.0232,
+    "median_latency_ms": 0.1
+  },
+  "laya_appended": {
+    "n": 198,
+    "auc": 0.7151,
+    "accuracy_at_half": 0.7121,
+    "best_accuracy": 0.7121,
+    "clean_mean": 0.2021,
+    "injected_mean": 0.6225,
+    "median_latency_ms": 27.4
+  },
+  "laya_prepended": {
+    "n": 198,
+    "auc": 0.6669,
+    "accuracy_at_half": 0.6717,
+    "best_accuracy": 0.6717,
+    "clean_mean": 0.2021,
+    "injected_mean": 0.5453,
+    "median_latency_ms": 27.4
+  },
+  "laya_embedded": {
+    "n": 198,
+    "auc": 0.6819,
+    "accuracy_at_half": 0.6768,
+    "best_accuracy": 0.6768,
+    "clean_mean": 0.2021,
+    "injected_mean": 0.5554,
+    "median_latency_ms": 27.4
+  },
+  "classifiers": {
+    "protectai/deberta-v3-base-prompt-injection-v2": {
+      "labels": {
+        "0": "SAFE",
+        "1": "INJECTION"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 184423682
+    },
+    "protectai/deberta-v3-base-prompt-injection": {
+      "labels": {
+        "0": "SAFE",
+        "1": "INJECTION"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 184423682
+    },
+    "meta-llama/Prompt-Guard-86M": {
+      "error": "OSError: You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/meta-llama/Prompt-Guard-86M.\n403 Client Error. (Request ID: Root=1-6acafcb1-0a30c3df7324085d1e3cce58;599"
+    },
+    "meta-llama/Llama-Prompt-Guard-2-86M": {
+      "error": "OSError: You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/meta-llama/Llama-Prompt-Guard-2-86M.\n403 Client Error. (Request ID: Root=1-6acafcb1-5acd7a341d6d9f653f4c"
+    },
+    "rogue-security/prompt-injection-jailbreak-sentinel-v2": {
+      "error": "OSError: You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/rogue-security/prompt-injection-jailbreak-sentinel-v2.\n403 Client Error. (Request ID: Root=1-6acafcb1-77"
+    },
+    "patronus-studio/wolf-defender-prompt-injection-small": {
+      "labels": {
+        "0": "benign",
+        "1": "injection"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 140642306
+    },
+    "testsavantai/prompt-injection-defender-large-v0": {
+      "labels": {
+        "0": "SAFE",
+        "1": "INJECTION"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 184423682
+    },
+    "sheltron-ai/prompt-guard-68m": {
+      "labels": {
+        "0": "presence:attack",
+        "1": "channel:direct",
+        "10": "objective:persistent_state_change",
+        "11": "technique:explicit_override",
+        "12": "technique:authority_impersonation",
+        "13": "technique:role_spoofing",
+        "14": "technique:delimiter_spoofing",
+        "15": "technique:context_smuggling",
+        "16": "technique:obfuscation_or_encoding",
+        "17": "technique:roleplay_or_hypothetical",
+        "18": "technique:multi_step_decomposition",
+        "19": "technique:social_engineering",
+        "2": "channel:indirect",
+        "20": "technique:conditional_trigger",
+        "21": "technique:distributed_instruction",
+        "3": "channel:mixed",
+        "4": "objective:instruction_override",
+        "5": "objective:policy_bypass",
+        "6": "objective:protected_information_extraction",
+        "7": "objective:unauthorized_tool_use",
+        "8": "objective:tool_argument_manipulation",
+        "9": "objective:data_exfiltration"
+      },
+      "benign_ids": [],
+      "parameters": 68418582
+    },
+    "prismor/prompt-guard-1.5b": {
+      "labels": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 1543717376
+    },
+    "GuardrailsAI/prompt-saturation-attack-detector": {
+      "labels": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 4386178
+    },
+    "jackhhao/jailbreak-classifier": {
+      "labels": {
+        "0": "benign",
+        "1": "jailbreak"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 109483778
+    },
+    "lordofthejars/jailbreak-classifier": {
+      "labels": {
+        "0": "benign",
+        "1": "jailbreak"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 109483778
+    },
+    "vllm-sr/jailbreak_classifier_modernbert-base_model": {
+      "labels": {
+        "0": "benign",
+        "1": "jailbreak"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 149606402
+    },
+    "deepset/deberta-v3-base-injection": {
+      "labels": {
+        "0": "LEGIT",
+        "1": "INJECTION"
+      },
+      "benign_ids": [
+        0
+      ],
+      "parameters": 184423682
+    }
+  },
+  "protectai/deberta-v3-base-prompt-injection-v2_appended": {
+    "n": 198,
+    "auc": 0.6132,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.6263,
+    "clean_mean": 0.1434,
+    "injected_mean": 0.243,
+    "median_latency_ms": 18.9
+  },
+  "protectai/deberta-v3-base-prompt-injection-v2_prepended": {
+    "n": 198,
+    "auc": 0.6246,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.6414,
+    "clean_mean": 0.1434,
+    "injected_mean": 0.2496,
+    "median_latency_ms": 18.9
+  },
+  "protectai/deberta-v3-base-prompt-injection-v2_embedded": {
+    "n": 198,
+    "auc": 0.6137,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.6212,
+    "clean_mean": 0.1434,
+    "injected_mean": 0.2458,
+    "median_latency_ms": 19.1
+  },
+  "protectai/deberta-v3-base-prompt-injection_appended": {
+    "n": 198,
+    "auc": 0.4894,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5,
+    "clean_mean": 0.0404,
+    "injected_mean": 0.0398,
+    "median_latency_ms": 18.9
+  },
+  "protectai/deberta-v3-base-prompt-injection_prepended": {
+    "n": 198,
+    "auc": 0.4893,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5,
+    "clean_mean": 0.0404,
+    "injected_mean": 0.0397,
+    "median_latency_ms": 18.9
+  },
+  "protectai/deberta-v3-base-prompt-injection_embedded": {
+    "n": 198,
+    "auc": 0.4894,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5,
+    "clean_mean": 0.0404,
+    "injected_mean": 0.0385,
+    "median_latency_ms": 18.8
+  },
+  "patronus-studio/wolf-defender-prompt-injection-small_appended": {
+    "n": 198,
+    "auc": 0.604,
+    "accuracy_at_half": 0.5303,
+    "best_accuracy": 0.6162,
+    "clean_mean": 0.1585,
+    "injected_mean": 0.2323,
+    "median_latency_ms": 15.7
+  },
+  "patronus-studio/wolf-defender-prompt-injection-small_prepended": {
+    "n": 198,
+    "auc": 0.6082,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.6111,
+    "clean_mean": 0.1585,
+    "injected_mean": 0.2541,
+    "median_latency_ms": 15.6
+  },
+  "patronus-studio/wolf-defender-prompt-injection-small_embedded": {
+    "n": 198,
+    "auc": 0.6628,
+    "accuracy_at_half": 0.5758,
+    "best_accuracy": 0.6515,
+    "clean_mean": 0.1585,
+    "injected_mean": 0.2957,
+    "median_latency_ms": 15.6
+  },
+  "testsavantai/prompt-injection-defender-large-v0_appended": {
+    "n": 198,
+    "auc": 0.4168,
+    "accuracy_at_half": 0.5202,
+    "best_accuracy": 0.5354,
+    "clean_mean": 0.0788,
+    "injected_mean": 0.1244,
+    "median_latency_ms": 19.2
+  },
+  "testsavantai/prompt-injection-defender-large-v0_prepended": {
+    "n": 198,
+    "auc": 0.4101,
+    "accuracy_at_half": 0.5303,
+    "best_accuracy": 0.5455,
+    "clean_mean": 0.0788,
+    "injected_mean": 0.145,
+    "median_latency_ms": 19.2
+  },
+  "testsavantai/prompt-injection-defender-large-v0_embedded": {
+    "n": 198,
+    "auc": 0.4536,
+    "accuracy_at_half": 0.5303,
+    "best_accuracy": 0.5455,
+    "clean_mean": 0.0788,
+    "injected_mean": 0.1436,
+    "median_latency_ms": 19.1
+  },
+  "sheltron-ai/prompt-guard-68m_appended": {
+    "n": 198,
+    "auc": 0.7728,
+    "accuracy_at_half": 0.5657,
+    "best_accuracy": 0.7727,
+    "clean_mean": 0.1847,
+    "injected_mean": 0.3537,
+    "median_latency_ms": 13.9
+  },
+  "sheltron-ai/prompt-guard-68m_prepended": {
+    "n": 198,
+    "auc": 0.789,
+    "accuracy_at_half": 0.5707,
+    "best_accuracy": 0.7778,
+    "clean_mean": 0.1847,
+    "injected_mean": 0.3689,
+    "median_latency_ms": 13.8
+  },
+  "sheltron-ai/prompt-guard-68m_embedded": {
+    "n": 198,
+    "auc": 0.7923,
+    "accuracy_at_half": 0.5808,
+    "best_accuracy": 0.7879,
+    "clean_mean": 0.1847,
+    "injected_mean": 0.3784,
+    "median_latency_ms": 13.8
+  },
+  "prismor/prompt-guard-1.5b_appended": {
+    "n": 198,
+    "auc": 0.5112,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.5556,
+    "clean_mean": 0.0966,
+    "injected_mean": 0.1257,
+    "median_latency_ms": 26.1
+  },
+  "prismor/prompt-guard-1.5b_prepended": {
+    "n": 198,
+    "auc": 0.5072,
+    "accuracy_at_half": 0.5101,
+    "best_accuracy": 0.5404,
+    "clean_mean": 0.0966,
+    "injected_mean": 0.0953,
+    "median_latency_ms": 25.5
+  },
+  "prismor/prompt-guard-1.5b_embedded": {
+    "n": 198,
+    "auc": 0.5113,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5859,
+    "clean_mean": 0.0966,
+    "injected_mean": 0.0772,
+    "median_latency_ms": 25.6
+  },
+  "GuardrailsAI/prompt-saturation-attack-detector_appended": {
+    "n": 198,
+    "auc": 0.6726,
+    "accuracy_at_half": 0.5657,
+    "best_accuracy": 0.6566,
+    "clean_mean": 0.2509,
+    "injected_mean": 0.3889,
+    "median_latency_ms": 2.4
+  },
+  "GuardrailsAI/prompt-saturation-attack-detector_prepended": {
+    "n": 198,
+    "auc": 0.6726,
+    "accuracy_at_half": 0.5657,
+    "best_accuracy": 0.6566,
+    "clean_mean": 0.2509,
+    "injected_mean": 0.3889,
+    "median_latency_ms": 2.3
+  },
+  "GuardrailsAI/prompt-saturation-attack-detector_embedded": {
+    "n": 198,
+    "auc": 0.6753,
+    "accuracy_at_half": 0.5657,
+    "best_accuracy": 0.6566,
+    "clean_mean": 0.2509,
+    "injected_mean": 0.3907,
+    "median_latency_ms": 2.2
+  },
+  "jackhhao/jailbreak-classifier_appended": {
+    "n": 198,
+    "auc": 0.4162,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5404,
+    "clean_mean": 0.2505,
+    "injected_mean": 0.2542,
+    "median_latency_ms": 8.5
+  },
+  "jackhhao/jailbreak-classifier_prepended": {
+    "n": 198,
+    "auc": 0.4927,
+    "accuracy_at_half": 0.5051,
+    "best_accuracy": 0.5354,
+    "clean_mean": 0.2505,
+    "injected_mean": 0.2636,
+    "median_latency_ms": 7.6
+  },
+  "jackhhao/jailbreak-classifier_embedded": {
+    "n": 198,
+    "auc": 0.516,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.5556,
+    "clean_mean": 0.2505,
+    "injected_mean": 0.3247,
+    "median_latency_ms": 7.4
+  },
+  "lordofthejars/jailbreak-classifier_appended": {
+    "n": 198,
+    "auc": 0.4162,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.5404,
+    "clean_mean": 0.2505,
+    "injected_mean": 0.2542,
+    "median_latency_ms": 7.7
+  },
+  "lordofthejars/jailbreak-classifier_prepended": {
+    "n": 198,
+    "auc": 0.4927,
+    "accuracy_at_half": 0.5051,
+    "best_accuracy": 0.5354,
+    "clean_mean": 0.2505,
+    "injected_mean": 0.2636,
+    "median_latency_ms": 7.4
+  },
+  "lordofthejars/jailbreak-classifier_embedded": {
+    "n": 198,
+    "auc": 0.516,
+    "accuracy_at_half": 0.5505,
+    "best_accuracy": 0.5556,
+    "clean_mean": 0.2505,
+    "injected_mean": 0.3247,
+    "median_latency_ms": 7.4
+  },
+  "vllm-sr/jailbreak_classifier_modernbert-base_model_appended": {
+    "n": 198,
+    "auc": 0.3967,
+    "accuracy_at_half": 0.4495,
+    "best_accuracy": 0.5,
+    "clean_mean": 0.4957,
+    "injected_mean": 0.4235,
+    "median_latency_ms": 16.0
+  },
+  "vllm-sr/jailbreak_classifier_modernbert-base_model_prepended": {
+    "n": 198,
+    "auc": 0.3949,
+    "accuracy_at_half": 0.4444,
+    "best_accuracy": 0.5,
+    "clean_mean": 0.4957,
+    "injected_mean": 0.4226,
+    "median_latency_ms": 16.1
+  },
+  "vllm-sr/jailbreak_classifier_modernbert-base_model_embedded": {
+    "n": 198,
+    "auc": 0.3937,
+    "accuracy_at_half": 0.4394,
+    "best_accuracy": 0.5051,
+    "clean_mean": 0.4957,
+    "injected_mean": 0.4235,
+    "median_latency_ms": 16.0
+  },
+  "deepset/deberta-v3-base-injection_appended": {
+    "n": 198,
+    "auc": 0.8782,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.8131,
+    "clean_mean": 0.9954,
+    "injected_mean": 0.9987,
+    "median_latency_ms": 20.0
+  },
+  "deepset/deberta-v3-base-injection_prepended": {
+    "n": 198,
+    "auc": 0.9146,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.8384,
+    "clean_mean": 0.9954,
+    "injected_mean": 0.9988,
+    "median_latency_ms": 19.5
+  },
+  "deepset/deberta-v3-base-injection_embedded": {
+    "n": 198,
+    "auc": 0.8898,
+    "accuracy_at_half": 0.5,
+    "best_accuracy": 0.8384,
+    "clean_mean": 0.9954,
+    "injected_mean": 0.9985,
+    "median_latency_ms": 19.2
+  }
+}
