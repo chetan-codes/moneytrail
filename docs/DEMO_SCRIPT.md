@@ -2,7 +2,7 @@
 
 Every number below is measured, not estimated. Re-measure before recording if the code changes.
 
-Setup: `python scripts/run.py`, browser at `http://127.0.0.1:5173`, mode **Live AI · Qwen3-8B**.
+Setup: `python scripts/run.py`, browser at `http://127.0.0.1:5173`, mode **Live AI · Qwen3-30B-A3B**.
 Total runtime at this pace: about 2 minutes 30 seconds.
 
 ## 0:00 — The question (hold on the landing screen)
@@ -39,9 +39,9 @@ The case re-opens at version 2, re-retrieves, re-verifies.
 
 Hold on the resolution card and give the measured comparison:
 
-> "We ran the same thirty held-out cases through a single model with every record handed to it and nothing to retrieve. It got nine. Eighteen of its answers were resolutions it had no evidence to support. Our verifier gets thirty out of thirty, and agrees with first principles on five thousand random payments."
+> "We ran the same thirty held-out cases through a single model with every record handed to it and nothing to retrieve. It got ten. Eighteen of its answers were resolutions it had no evidence to support. Our verifier gets thirty out of thirty, and agrees with first principles on five thousand random payments."
 
-> "Then we attacked it. Twenty-one different instructions hidden inside the agreement, run through the live system. Six of them fooled the model that reads the document. None of them changed the outcome — a fooled reader escalates to a person, it never produces a decision."
+> "Then we attacked it. Twenty-one different instructions hidden inside the agreement, run through the live system. Four of them fooled the model that reads the document. None of them changed the outcome — a fooled reader escalates to a person, it never produces a decision."
 
 > "The model is not what makes this accurate. The checks are."
 
@@ -53,14 +53,15 @@ Hold on the resolution card and give the measured comparison:
 
 | Claim | Value |
 |---|---|
-| Live investigation, end to end | 3–5 s (median 3.7 s over 200 runs) |
-| Cost per live investigation | about $0.0002 |
+| Live investigation, end to end | about 4 s (median 3.8 s, slowest 6.8 s over 200 runs) |
+| Cost per live investigation | about $0.0003 |
 | Six cases, approvals and amendment twists, live, ten rounds | 110/110 |
-| 120 random payments, live, 20 with an injected note | 110 correct, 10 stopped for a human, 0 wrong |
+| 120 random payments, live, 20 with an injected note | 114 correct, 6 stopped for a human, 0 wrong |
+| Bug planted in the verifier, same 120 payments | 80 wrong results, 80 stopped, 0 got through |
 | Deterministic verifier, 30 held-out cases | 30/30, 0 unsupported resolutions |
-| Single centralized model, same 30 cases | 9/30, 18 unsupported resolutions |
+| Single centralized model, same 30 cases | 10/30, 18 unsupported resolutions |
 | Deterministic verifier, 5,000 random payments | 5,000/5,000 against a first-principles oracle |
-| 21 distinct injected documents, live | 0 wrong dispositions; 6 escalated to a human |
+| 21 distinct injected documents, live | 0 wrong dispositions; 4 escalated to a human |
 | Retrieval completeness | 1.0 |
 | Graph | 1,271 nodes, 61 FPS median |
 

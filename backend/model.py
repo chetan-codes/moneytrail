@@ -5,7 +5,8 @@ import os
 from pathlib import Path
 import httpx
 
-MODEL = 'Qwen/Qwen3-8B'
+# Overridable because a hosted model can be withdrawn: Qwen3-8B was, between two runs of this project.
+MODEL = os.getenv('HF_MODEL') or 'Qwen/Qwen3-30B-A3B'
 _lock = asyncio.Lock()
 
 

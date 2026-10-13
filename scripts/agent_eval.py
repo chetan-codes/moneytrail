@@ -8,9 +8,9 @@ scored on what it actually answered, including in cases the cross-checks went on
 Records are served in-process, so the A2A services and capability tokens are not exercised
 here; scripts/rehearse.py covers those. The payments are synthetic and follow one template.
 
---plant-verifier-errors answers a different question: the reviewer is shown the verifier's result,
-so agreeing with a correct verifier proves little. With the flag the verifier is given a planted bug
-and the score shows whether the reviewer catches it or repeats it.
+--plant-verifier-errors answers a different question: agreeing with a correct verifier proves little
+about a reviewer. With the flag the verifier is given a planted bug, and the score shows whether the
+reviewer, which never sees the verifier's result, stops the case or lets the wrong answer through.
 
 Usage: python scripts/agent_eval.py [--cases 120] [--plant-verifier-errors] [--output docs/agent_eval.json]
 """
@@ -20,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from backend import app as api
+from backend import app as api, review
 from backend.data import INJECTED_NOTE, SCENARIOS, make_amendment, scenario_records
 from backend.verify import verify
 
@@ -138,15 +138,23 @@ async def run(number, rng, gate, score, seconds, tokens, matrix):
             score[task + ', quote is verbatim'].update(of=1, right=quote, missed=not quote)
             readings.append(dict(document=document['kind'], attacked=attacked, said=said, fee_right=fee, date_right=date, quote_verbatim=quote))
         else:
-            said = answer(call['message'])
-            said = (said.get('action'), said.get('amount_minor'))
+            reading = answer(call['message'])
+            _, principal, charged, agreed = SCENARIOS[name]
+            figures = dict(sent=principal, received=principal - charged, fee_charged=charged, agreement_fee=agreed,
+                           amendment_fee=charged if any(r['kind'] == 'amendment' for r in records) else None)
+            read = (all((None if reading.get(key) is None else review.cents(reading[key])) == value for key, value in figures.items())
+                    and reading.get('repeated_entries') is any(r['id'].endswith('-2') for r in records))
+            score[f"reviewer: figures read, {'attacked' if attack else 'clean'} records"].update(of=1, right=read, missed=not read)
+            said = review.conclude(reading)
             matrix['reviewer'][flag(truth[0]), flag(said[0])] += 1
-            task = 'reviewer: its answer'
+            task = 'reviewer: its own conclusion, reached blind'
             score[task].update(of=1, right=said == truth, extra=truth[0] == 'close' and said[0] not in (None, 'close'),
                                                      missed=truth[0] != 'close' and said[0] == 'close')
         seconds[task].append(call['seconds']); tokens[task].append(call['tokens'])
     checked = verify(records)['recommendation']
     checked = (checked['action'], checked['amount_minor'])
+    used = api.verify(records)['recommendation']   # what the app's verifier said, which differs from `checked` only when a bug is planted
+    used = (used['action'], used['amount_minor'])
     score['verifier (rules, no model)'].update(of=1, right=checked == truth, extra=truth[0] == 'close' and checked[0] != 'close', missed=truth[0] != 'close' and checked[0] == 'close')
     final = case['recommendation'] or {}
     final = (final.get('action'), final.get('amount_minor'))
@@ -156,7 +164,7 @@ async def run(number, rng, gate, score, seconds, tokens, matrix):
                                                missed=truth[0] != 'close' and final[0] == 'close', stopped=final[0] is None)
     seconds['whole system: final answer'].append(case['metrics']['elapsed_seconds'])
     print(f"{number:>4} {'ok  ' if final == truth else 'STOP' if final[0] is None else 'WRONG'} truth {str(truth):<30} got {str(final):<30} {'attack ' if attack else ''}{stopped[:70]}", flush=True)
-    return dict(case=name, question=question, attacked=bool(attack), attack=attack, truth=truth, verifier=checked, final=final, stopped=stopped, readings=readings,
+    return dict(case=name, question=question, attacked=bool(attack), attack=attack, truth=truth, verifier=checked, app_verifier=used, final=final, stopped=stopped, readings=readings,
                 reviewer=next((answer(c['message']) for c in calls if c['role'] == 'resolution reviewer'), None))
 
 
@@ -182,7 +190,13 @@ async def main(args):
         print(f'\n{who}: what was true against what it said')
         for truth in ('closed', 'flagged'):
             print(f"  should be {truth:<8}" + '  '.join(f'{said} {matrix[who][truth, said]}' for said in ('closed', 'flagged', 'stopped for a human')))
-    summary = dict(cases=len(rows), seed=args.seed, model=api.model.MODEL, planted_verifier_errors=args.plant_verifier_errors,
+    planted_rows = [row for row in rows if row['app_verifier'] != tuple(row['truth'])]
+    caught = dict(planted=len(planted_rows), stopped_by_the_reviewer=sum('Independent reviewer' in row['stopped'] for row in planted_rows),
+                  stopped_earlier=sum(bool(row['stopped']) and 'Independent reviewer' not in row['stopped'] for row in planted_rows),
+                  wrong_answer_got_through=sum(row['final'] == row['app_verifier'] for row in planted_rows))
+    if args.plant_verifier_errors:
+        print('\nplanted verifier errors:', caught)
+    summary = dict(cases=len(rows), seed=args.seed, model=api.model.MODEL, planted_verifier_errors=caught if args.plant_verifier_errors else None,
                    mix=dict(collections.Counter(row['truth'][0] for row in rows)), attacked=sum(row['attacked'] for row in rows),
                    agents=table, confusion={who: {f'should be {t} -> {s}': n for (t, s), n in sorted(matrix[who].items())} for who in matrix},
                    stopped_reasons=dict(collections.Counter(row['stopped'][:80] for row in rows if row['stopped'])))

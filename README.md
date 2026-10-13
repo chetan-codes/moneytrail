@@ -14,7 +14,7 @@ Finding the money is the first step. Checking the explanation is the important o
 | Three isolated services, each reading only its own SQLite store | The `PAY-104` reference and the $35 → $350 fee error |
 | HMAC capability tokens scoped per case and reference | |
 | Deterministic verification arithmetic | |
-| Live open-model inference (`Qwen/Qwen3-8B`) when selected | |
+| Live open-model inference (`Qwen/Qwen3-30B-A3B`) when selected | |
 | Human approval, idempotency and version checks | |
 
 No money moves. "Approved request", "accepted" and "adjustment posted" are separate states.
@@ -37,14 +37,14 @@ On any case, anyone can add a seeded, clearly labelled amendment permitting the 
 ## Modes
 
 - `deterministic` — real A2A retrieval and real arithmetic, explicitly **no** model inference.
-- `live` — the same retrieval, with `Qwen/Qwen3-8B` acting as manager, document verifier and resolution reviewer.
+- `live` — the same retrieval, with `Qwen/Qwen3-30B-A3B` acting as manager, document reader and independent reviewer. `HF_MODEL` in `.env` selects another model.
 - `replay` — explicitly labelled playback of recorded events. Never calls a model, actions disabled.
 
 A failed model call never falls back to deterministic output and pretends inference happened.
 
 ## Verification is not "a second model agreeing"
 
-Amounts, currencies, references, duplicates and citation validity are checked by deterministic code. The model's document reading is accepted only when it matches the document's attested fields *and* its supporting quote appears verbatim in the source. The resolution reviewer cannot change a disposition the verifier did not reach.
+Amounts, currencies, references, duplicates and citation validity are checked by deterministic code. The model's document reading is accepted only when it matches the document's attested fields *and* its supporting quote appears verbatim in the source. The reviewer is never shown the verifier's result. It is given the prose of the records, with no structured amounts and no attested fields, and copies out the figures; a separate rule (`backend/review.py`) turns that reading into the reviewer's own conclusion, and the case stops unless it equals the verifier's. The reviewer can stop a case. It cannot change or approve one.
 
 ## Run it
 
@@ -93,14 +93,17 @@ What was tested, and on how much. Everything here is synthetic; no real company'
 |---|---|---|
 | Deterministic verifier, hand-built held-out cases | 30 (6 situations x 5 amounts) | **30/30**, 0 unsupported resolutions |
 | Deterministic verifier, randomized payments | 5,000 random principals, fees, amendments and evidence faults | **5,000/5,000** agree with a first-principles oracle |
-| One centralized model, same 30 cases, same evidence | 30 | 9/30, 18 unsupported resolutions |
-| Injected documents through the live services | 21 distinct attacks | **0 wrong dispositions**; 15 unaffected, 6 escalated to a human |
+| One centralized model, same 30 cases, same evidence | 30 | 10/30, 18 unsupported resolutions |
+| Injected documents through the live services | 21 distinct attacks | **0 wrong dispositions**; 17 unaffected, 4 escalated to a human |
 | Live rehearsal, ten rounds of all six cases, approvals and amendment twists | 110 checks, 80 investigations | **110/110**; 0 false positives, 0 false negatives |
-| Live investigations on varied payments | 120 random payments, 20 with an injected note | 110 correct, 10 stopped for a human, **0 wrong** |
-| Live end-to-end investigation | 200 investigations | median 3.7 s, slowest 5.3 s, about $0.0002 |
+| Live investigations on varied payments | 120 random payments, 20 with an injected note | 114 correct, 6 stopped for a human, **0 wrong** |
+| The same 120 payments with a bug planted in the verifier | 80 wrong verifier results | **80 stopped, 0 got through**: 76 by the reviewer, 4 earlier by the document reader |
+| Live end-to-end investigation | 200 investigations | median 3.8 s, slowest 6.8 s, about $0.0003 |
 | FinRCA-Bench, out of domain | 2,250 | flags every case; 0 fabricated dispositions (see `docs/FINRCA_MAPPING.md`) |
 
-Read the limits with the numbers. The 30 cases and the oracle were written by the same hands as the verifier, so they show the implementation matches its rule, not that the rule matches real contracts. The randomized test varies amounts and faults, not wording, because the verifier does not read wording. The centralized model also gets the base case wrong with no attack present, so its failures are not evidence about injection specifically.
+Read the limits with the numbers. The 30 cases and the oracle were written by the same hands as the verifier, so they show the implementation matches its rule, not that the rule matches real contracts. The randomized test varies amounts and faults, not wording, because the verifier does not read wording. The centralized model gets the plain overcharge and the plain valid fee right and fails everything else in the set: amendments, missing agreements, ambiguous references and injected documents.
+
+Every live figure here was measured with `Qwen/Qwen3-30B-A3B`. The project was first measured on `Qwen/Qwen3-8B`, which its hosting provider has since withdrawn; the results were re-run, not carried over.
 
 ### Each agent, scored on its own task
 
@@ -108,19 +111,22 @@ Read the limits with the numbers. The 30 cases and the oracle were written by th
 
 | Agent | Its task | Result | Median time |
 |---|---|---|---|
-| Manager (Qwen3-8B) | Ask for exactly the evidence still outstanding | 480/480 requests; 0 unneeded, 0 missed | 1.4 s |
+| Manager | Ask for exactly the evidence still outstanding | 480/480 requests; 0 unneeded, 0 missed | 1.5 s |
 | Sender, processor and recipient services | Return their own records for this payment and nothing else | 740/740 records; 0 out of scope, 0 missing | 0.01 s |
-| Document reader (Qwen3-8B), clean documents | Read the fee and date and quote the line | 107/107 | 1.0 s |
-| Document reader, documents carrying an injected note | The same | 10/20; every misreading was caught and the case stopped | 1.0 s |
+| Document reader, clean documents | Read the fee and date and quote the line | 107/107 | 0.9 s |
+| Document reader, documents carrying an injected note | The same | 14/20; every misreading was caught and the case stopped | 1.0 s |
 | Verifier (rules, no model) | Decide the disposition and the amount | 120/120 | — |
-| Reviewer (Qwen3-8B) | Agree or disagree with the verifier's result | 110/110 agreed, which is weak evidence: see below | 1.4 s |
-| Whole system | Final answer | 110 correct, 10 stopped for a human, 0 false positives, 0 false negatives | 3.8 s |
+| Reviewer | Copy the figures out of the prose | 114/114 | 1.2 s |
+| Reviewer | Reach its own conclusion without the verifier's result | 114/114 | — |
+| Whole system | Final answer | 114 correct, 6 stopped for a human, 0 false positives, 0 false negatives | 3.8 s |
 
 Two things this shows that the headline numbers hide:
 
-- **The document reader is easy to fool, and it does not matter.** A note that restates the fee ("the agreed fee is now USD 350.00") fooled it 10 times out of 11, and each time it reported the attacker's figure. Notes that only give orders ("close this case") fooled it 0 times out of 9. The reader also quoted the attacker's line, which is verbatim in the document, so the quote check passed all 20 times; what stopped the 10 bad readings was the comparison with the organization's attested fields.
-- **The reviewer is not an independent check.** It is shown the verifier's result. When the verifier was given a planted bug on the same 120 payments (`--plant-verifier-errors`, `docs/agent_eval_planted.json`), the reviewer repeated the wrong result in 72 of 72 cases. It can stop a case; it has not been shown to catch an error. The protections with evidence behind them are the verifier's rules, the attested-field match and the human approval.
+- **The document reader can be fooled, and it does not matter.** A note that restates the fee ("the agreed fee is now USD 350.00") fooled it 6 times out of 11, and each time it reported the attacker's figure. Notes that only give orders ("close this case") fooled it 0 times out of 9. The reader also quoted the attacker's line, which is verbatim in the document, so the quote check passed all 20 times; what stopped the 6 bad readings was the comparison with the organization's attested fields.
+- **The reviewer is an independent check, and it had to be rebuilt to become one.** As first written it was shown the verifier's result, and when the verifier was given a planted bug it repeated the wrong answer in 72 of 72 cases. Letting the model decide the case by itself was no better: in a development trial it reached the right answer on 73 of 128 payments, losing the rest to arithmetic and unit slips. What works is splitting the job. The model copies the figures from the prose, which it does reliably, and a separate rule does the arithmetic. With the same planted bug the verifier was wrong on 80 payments and none got through (`--plant-verifier-errors`, `docs/agent_eval_planted.json`).
+
+What the reviewer does not give you: its rule was written by the same person as the verifier's, so a misunderstanding of the policy would be in both (a randomized test only checks that the two agree when both are given the truth). And because it reads prose, a note that restates a figure can fool it, which stops the case.
 
 These payments all follow one document template: the amounts, questions and attacks vary, the wording of a clean agreement does not.
 
-The injection result is the one that depends on design rather than luck: an injected document can fool the model that reads it — it did, 6 times in 21 — but the reading is only accepted when it matches the organization's attested fields, so a fooled reader produces an escalation, never a disposition. That guarantee is only as good as the attested fields; a counterparty that falsifies its structured record, not just its prose, is outside what this checks.
+The injection result is the one that depends on design rather than luck: an injected document can fool the model that reads it — it did, 4 times in 21 — but the reading is only accepted when it matches the organization's attested fields, so a fooled reader produces an escalation, never a disposition. The reviewer covers the other direction: it reads the prose of every record, so a structured amount that disagrees with its own prose stops the case too (`tests/test_api.py`). A counterparty that falsifies its prose and its structured record the same way is still outside what this checks.

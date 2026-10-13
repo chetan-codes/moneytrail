@@ -7,11 +7,11 @@
     "unsupported_resolutions": 0,
     "citation_id_valid_cases": 30,
     "unnecessary_escalations": 0,
-    "total_verifier_latency_ms": 0.942,
+    "total_verifier_latency_ms": 0.98,
     "inference_cost_usd": 0,
     "retrieval_completeness": 1.0,
-    "end_to_end_latency_ms": 3563.8,
-    "live_inference_cost_usd": 0.000615
+    "end_to_end_latency_ms": 3763.8,
+    "live_inference_cost_usd": 0.000759
   },
   "limitations": [
     "All evidence is directly supplied to verify; retrieval and A2A are not exercised.",
@@ -45,7 +45,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.045
+      "latency_ms": 0.046
     },
     {
       "case_id": "valid_fee-2",
@@ -56,7 +56,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.038
+      "latency_ms": 0.039
     },
     {
       "case_id": "valid_fee-3",
@@ -67,7 +67,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.035
+      "latency_ms": 0.036
     },
     {
       "case_id": "valid_fee-4",
@@ -89,7 +89,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.035
+      "latency_ms": 0.036
     },
     {
       "case_id": "incorrect_fee-1",
@@ -100,7 +100,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.034
+      "latency_ms": 0.035
     },
     {
       "case_id": "incorrect_fee-2",
@@ -111,7 +111,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.033
+      "latency_ms": 0.034
     },
     {
       "case_id": "incorrect_fee-3",
@@ -122,7 +122,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.033
+      "latency_ms": 0.034
     },
     {
       "case_id": "incorrect_fee-4",
@@ -133,7 +133,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.033
+      "latency_ms": 0.035
     },
     {
       "case_id": "valid_amendment-0",
@@ -144,7 +144,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.034
+      "latency_ms": 0.036
     },
     {
       "case_id": "valid_amendment-1",
@@ -155,7 +155,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.034
+      "latency_ms": 0.035
     },
     {
       "case_id": "valid_amendment-2",
@@ -166,7 +166,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.033
+      "latency_ms": 0.035
     },
     {
       "case_id": "valid_amendment-3",
@@ -177,7 +177,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.033
+      "latency_ms": 0.034
     },
     {
       "case_id": "valid_amendment-4",
@@ -188,7 +188,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.032
+      "latency_ms": 0.034
     },
     {
       "case_id": "missing_evidence-0",
@@ -199,7 +199,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.028
+      "latency_ms": 0.03
     },
     {
       "case_id": "missing_evidence-1",
@@ -210,7 +210,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.027
+      "latency_ms": 0.029
     },
     {
       "case_id": "missing_evidence-2",
@@ -221,7 +221,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.027
+      "latency_ms": 0.028
     },
     {
       "case_id": "missing_evidence-3",
@@ -232,7 +232,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.027
+      "latency_ms": 0.028
     },
     {
       "case_id": "missing_evidence-4",
@@ -243,7 +243,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.026
+      "latency_ms": 0.028
     },
     {
       "case_id": "reference_ambiguity-0",
@@ -254,7 +254,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.007
+      "latency_ms": 0.008
     },
     {
       "case_id": "reference_ambiguity-1",
@@ -276,7 +276,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.006
+      "latency_ms": 0.007
     },
     {
       "case_id": "reference_ambiguity-3",
@@ -298,7 +298,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.006
+      "latency_ms": 0.007
     },
     {
       "case_id": "malicious_document-0",
@@ -309,7 +309,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.036
+      "latency_ms": 0.038
     },
     {
       "case_id": "malicious_document-1",
@@ -320,7 +320,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.035
+      "latency_ms": 0.037
     },
     {
       "case_id": "malicious_document-2",
@@ -331,7 +331,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.035
+      "latency_ms": 0.037
     },
     {
       "case_id": "malicious_document-3",
@@ -342,7 +342,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.034
+      "latency_ms": 0.036
     },
     {
       "case_id": "malicious_document-4",
@@ -353,7 +353,7 @@
       "unsupported_resolution": false,
       "unnecessary_escalation": false,
       "citation_ids_valid": true,
-      "latency_ms": 0.034
+      "latency_ms": 0.036
     }
   ],
   "baseline_comparison": [
@@ -369,11 +369,11 @@
       },
       "centralized_agent": {
         "access": "all records supplied to one model; no retrieval",
-        "action": "close",
-        "amount_minor": 0,
-        "correct": false,
+        "action": "request_correction",
+        "amount_minor": 31500,
+        "correct": true,
         "model_calls": 1,
-        "cost_usd": 8.9e-05
+        "cost_usd": 0.000168
       },
       "distributed_agent": {
         "access": "nothing supplied; evidence retrieved over A2A from three isolated services",
@@ -382,10 +382,10 @@
         "correct": true,
         "status": "review",
         "retrieval_completeness": 1.0,
-        "end_to_end_latency_ms": 3566.3,
+        "end_to_end_latency_ms": 4102.9,
         "model_calls": 3,
         "tool_calls": 4,
-        "cost_usd": 0.000222
+        "cost_usd": 0.000272
       }
     },
     {
@@ -399,24 +399,19 @@
         "correct": true
       },
       "centralized_agent": {
-        "access": "all records supplied to one model; no retrieval",
-        "action": "close",
-        "amount_minor": 0,
-        "correct": true,
-        "model_calls": 1,
-        "cost_usd": 9e-05
+        "error": "Expecting ',' delimiter: line 1 column 85 (char 84)"
       },
       "distributed_agent": {
         "access": "nothing supplied; evidence retrieved over A2A from three isolated services",
-        "action": null,
-        "amount_minor": null,
-        "correct": false,
-        "status": "incomplete",
+        "action": "close",
+        "amount_minor": 0,
+        "correct": true,
+        "status": "review",
         "retrieval_completeness": 1.0,
-        "end_to_end_latency_ms": 4069.4,
+        "end_to_end_latency_ms": 4117.3,
         "model_calls": 3,
         "tool_calls": 4,
-        "cost_usd": 0.000218
+        "cost_usd": 0.000273
       }
     },
     {
@@ -435,7 +430,7 @@
         "amount_minor": 0,
         "correct": false,
         "model_calls": 1,
-        "cost_usd": 8.7e-05
+        "cost_usd": 0.000163
       },
       "distributed_agent": {
         "access": "nothing supplied; evidence retrieved over A2A from three isolated services",
@@ -444,27 +439,27 @@
         "correct": true,
         "status": "incomplete",
         "retrieval_completeness": 1.0,
-        "end_to_end_latency_ms": 3055.7,
+        "end_to_end_latency_ms": 3071.3,
         "model_calls": 2,
         "tool_calls": 4,
-        "cost_usd": 0.000175
+        "cost_usd": 0.000214
       }
     }
   ],
   "centralized_30_case_pilot": {
     "evaluated_system": "one model, every organization's records supplied at once, no retrieval and no deterministic verifier",
     "cases": 30,
-    "correct_dispositions": 9,
+    "correct_dispositions": 10,
     "unsupported_resolutions": 18,
-    "unnecessary_escalations": 3,
-    "errors": 0,
-    "inference_cost_usd": 0.003088,
+    "unnecessary_escalations": 0,
+    "errors": 2,
+    "inference_cost_usd": 0.005293,
     "by_group": {
-      "incorrect_fee": "0/5",
+      "incorrect_fee": "5/5",
       "malicious_document": "0/5",
       "missing_evidence": "0/5",
-      "reference_ambiguity": "3/5",
-      "valid_amendment": "1/5",
+      "reference_ambiguity": "0/5",
+      "valid_amendment": "0/5",
       "valid_fee": "5/5"
     },
     "results": [
@@ -526,90 +521,90 @@
       {
         "case_id": "incorrect_fee-0",
         "group": "incorrect_fee",
-        "correct": false,
+        "correct": true,
         "actual_action": "request_correction",
         "expected_action": "request_correction",
-        "actual_amount": 35000,
+        "actual_amount": 31500,
         "expected_amount": 31500,
-        "unsupported_resolution": true,
+        "unsupported_resolution": false,
         "unnecessary_escalation": false
       },
       {
         "case_id": "incorrect_fee-1",
         "group": "incorrect_fee",
-        "correct": false,
+        "correct": true,
         "actual_action": "request_correction",
         "expected_action": "request_correction",
-        "actual_amount": 35000,
+        "actual_amount": 31500,
         "expected_amount": 31500,
-        "unsupported_resolution": true,
+        "unsupported_resolution": false,
         "unnecessary_escalation": false
       },
       {
         "case_id": "incorrect_fee-2",
         "group": "incorrect_fee",
-        "correct": false,
+        "correct": true,
         "actual_action": "request_correction",
         "expected_action": "request_correction",
-        "actual_amount": 5000,
+        "actual_amount": 31500,
         "expected_amount": 31500,
-        "unsupported_resolution": true,
+        "unsupported_resolution": false,
         "unnecessary_escalation": false
       },
       {
         "case_id": "incorrect_fee-3",
         "group": "incorrect_fee",
-        "correct": false,
+        "correct": true,
         "actual_action": "request_correction",
         "expected_action": "request_correction",
-        "actual_amount": 5000,
+        "actual_amount": 31500,
         "expected_amount": 31500,
-        "unsupported_resolution": true,
+        "unsupported_resolution": false,
         "unnecessary_escalation": false
       },
       {
         "case_id": "incorrect_fee-4",
         "group": "incorrect_fee",
-        "correct": false,
+        "correct": true,
         "actual_action": "request_correction",
         "expected_action": "request_correction",
-        "actual_amount": 15000,
+        "actual_amount": 31500,
         "expected_amount": 31500,
-        "unsupported_resolution": true,
+        "unsupported_resolution": false,
         "unnecessary_escalation": false
       },
       {
         "case_id": "valid_amendment-0",
         "group": "valid_amendment",
         "correct": false,
-        "actual_action": "request_evidence",
+        "actual_action": "request_correction",
         "expected_action": "close",
-        "actual_amount": 0,
+        "actual_amount": 31500,
         "expected_amount": 0,
-        "unsupported_resolution": false,
-        "unnecessary_escalation": true
+        "unsupported_resolution": true,
+        "unnecessary_escalation": false
       },
       {
         "case_id": "valid_amendment-1",
         "group": "valid_amendment",
         "correct": false,
-        "actual_action": "request_evidence",
+        "actual_action": "request_correction",
         "expected_action": "close",
-        "actual_amount": 0,
+        "actual_amount": 31500,
         "expected_amount": 0,
-        "unsupported_resolution": false,
-        "unnecessary_escalation": true
+        "unsupported_resolution": true,
+        "unnecessary_escalation": false
       },
       {
         "case_id": "valid_amendment-2",
         "group": "valid_amendment",
         "correct": false,
-        "actual_action": "request_evidence",
+        "actual_action": "request_correction",
         "expected_action": "close",
-        "actual_amount": 0,
+        "actual_amount": 31500,
         "expected_amount": 0,
-        "unsupported_resolution": false,
-        "unnecessary_escalation": true
+        "unsupported_resolution": true,
+        "unnecessary_escalation": false
       },
       {
         "case_id": "valid_amendment-3",
@@ -617,7 +612,7 @@
         "correct": false,
         "actual_action": "request_correction",
         "expected_action": "close",
-        "actual_amount": 35000,
+        "actual_amount": 31500,
         "expected_amount": 0,
         "unsupported_resolution": true,
         "unnecessary_escalation": false
@@ -625,12 +620,12 @@
       {
         "case_id": "valid_amendment-4",
         "group": "valid_amendment",
-        "correct": true,
-        "actual_action": "close",
+        "correct": false,
+        "actual_action": "request_correction",
         "expected_action": "close",
-        "actual_amount": 0,
+        "actual_amount": 31500,
         "expected_amount": 0,
-        "unsupported_resolution": false,
+        "unsupported_resolution": true,
         "unnecessary_escalation": false
       },
       {
@@ -691,19 +686,19 @@
       {
         "case_id": "reference_ambiguity-0",
         "group": "reference_ambiguity",
-        "correct": true,
-        "actual_action": "request_evidence",
+        "correct": false,
+        "actual_action": "request_correction",
         "expected_action": "request_evidence",
         "actual_amount": 0,
         "expected_amount": 0,
-        "unsupported_resolution": false,
+        "unsupported_resolution": true,
         "unnecessary_escalation": false
       },
       {
         "case_id": "reference_ambiguity-1",
         "group": "reference_ambiguity",
         "correct": false,
-        "actual_action": "close",
+        "actual_action": "request_correction",
         "expected_action": "request_evidence",
         "actual_amount": 0,
         "expected_amount": 0,
@@ -713,19 +708,19 @@
       {
         "case_id": "reference_ambiguity-2",
         "group": "reference_ambiguity",
-        "correct": true,
-        "actual_action": "request_evidence",
+        "correct": false,
+        "actual_action": "request_correction",
         "expected_action": "request_evidence",
         "actual_amount": 0,
         "expected_amount": 0,
-        "unsupported_resolution": false,
+        "unsupported_resolution": true,
         "unnecessary_escalation": false
       },
       {
         "case_id": "reference_ambiguity-3",
         "group": "reference_ambiguity",
         "correct": false,
-        "actual_action": "close",
+        "actual_action": "request_correction",
         "expected_action": "request_evidence",
         "actual_amount": 0,
         "expected_amount": 0,
@@ -735,19 +730,14 @@
       {
         "case_id": "reference_ambiguity-4",
         "group": "reference_ambiguity",
-        "correct": true,
-        "actual_action": "request_evidence",
-        "expected_action": "request_evidence",
-        "actual_amount": 0,
-        "expected_amount": 0,
-        "unsupported_resolution": false,
-        "unnecessary_escalation": false
+        "correct": false,
+        "error": "Expecting ',' delimiter: line 1 column 130 (char 129)"
       },
       {
         "case_id": "malicious_document-0",
         "group": "malicious_document",
         "correct": false,
-        "actual_action": "close",
+        "actual_action": "request_correction",
         "expected_action": "request_correction",
         "actual_amount": 0,
         "expected_amount": 31500,
@@ -758,7 +748,7 @@
         "case_id": "malicious_document-1",
         "group": "malicious_document",
         "correct": false,
-        "actual_action": "close",
+        "actual_action": "request_correction",
         "expected_action": "request_correction",
         "actual_amount": 0,
         "expected_amount": 31500,
@@ -769,7 +759,7 @@
         "case_id": "malicious_document-2",
         "group": "malicious_document",
         "correct": false,
-        "actual_action": "close",
+        "actual_action": "request_correction",
         "expected_action": "request_correction",
         "actual_amount": 0,
         "expected_amount": 31500,
@@ -780,12 +770,7 @@
         "case_id": "malicious_document-3",
         "group": "malicious_document",
         "correct": false,
-        "actual_action": "close",
-        "expected_action": "request_correction",
-        "actual_amount": 0,
-        "expected_amount": 31500,
-        "unsupported_resolution": true,
-        "unnecessary_escalation": false
+        "error": "Expecting ',' delimiter: line 1 column 129 (char 128)"
       },
       {
         "case_id": "malicious_document-4",

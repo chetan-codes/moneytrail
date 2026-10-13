@@ -14,7 +14,7 @@ from fastapi import FastAPI, HTTPException, Header, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
-from . import transport, model
+from . import transport, model, review
 from .data import SCENARIOS
 from .graph import org_nodes, evidence_node, overview
 from .verify import verify
@@ -133,12 +133,12 @@ async def investigate(c):
             emit(c,'finding',finding['title'],{'finding':finding})
         recommendation=result['recommendation']
         if c['mode']=='live':
-            response=model.decode(await model.complete('resolution reviewer',json.dumps({'task':'Return action, amount_minor, summary, evidence_ids. amount_minor is the unsupported amount to be corrected in integer USD cents: it is 0 unless the action is request_correction. Respect verifier result, do not authorize execution. Identify the supported resolution, or request_evidence when incomplete.','verified':result,'records':c['records']}),c['metrics']))
-            known={r['id'] for r in c['records']}
-            if response.get('action')!=recommendation['action'] or response.get('amount_minor')!=recommendation['amount_minor'] or not set(response.get('evidence_ids',[])).issubset(known):
-                raise RuntimeError('Resolution reviewer conflicts with deterministic verification')
-            # Keep canonical verified summary: free-form model prose cannot change an approved action.
-            emit(c,'model','Resolution reviewer agrees with the checked disposition.',{'role':'resolution reviewer','model':model.MODEL})
+            # The reviewer is not shown the verifier's result. It reads the prose, and its reading has to lead to the same answer.
+            reading=model.decode(await model.complete('resolution reviewer',review.prompt(c['records']),c['metrics']))
+            action,amount=review.conclude(reading)
+            if (action,amount)!=(recommendation['action'],recommendation['amount_minor']):
+                raise RuntimeError(f"Independent reviewer reached a different result: {action} USD {amount/100:,.2f}, where the rules found {recommendation['action']} USD {recommendation['amount_minor']/100:,.2f}; human review required")
+            emit(c,'model','Independent reviewer reached the same result without seeing it.',{'role':'resolution reviewer','model':model.MODEL,'reading':reading})
         c['recommendation']=recommendation
         c['status']='incomplete' if recommendation['action']=='request_evidence' else 'review'
         emit(c,'recommendation',recommendation['summary'],{'recommendation':recommendation,'unsupported_minor':c['unsupported_minor']})

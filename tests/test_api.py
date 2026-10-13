@@ -12,6 +12,7 @@ import httpx
 
 from backend.data import generate, make_amendment, scenario_records
 from backend.security import issue, validate
+from backend.verify import verify
 api = importlib.import_module('backend.app')
 org = importlib.import_module('backend.org_service')
 
@@ -30,6 +31,7 @@ class CaseApiTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.tmp=tempfile.TemporaryDirectory()
         self.amendments=set()
+        self.falsified={}
         self.corrections=[]
         self.requests=[]
         api.CASES.clear();api.TASKS.clear();api.LOCKS.clear()
@@ -54,6 +56,9 @@ class CaseApiTests(unittest.IsolatedAsyncioTestCase):
             self.corrections.append(copy.deepcopy(payload))
             return {'status':'requested','message':'Correction requested; not settled.'}
         records=[r for r in scenario_records(payload['scenario']) if r['organization']==organization]
+        for record in records:
+            # A party that understates the fee in its structured fields while its prose still tells the truth.
+            if record['kind'] in self.falsified:record['amount_minor']=self.falsified[record['kind']]
         if organization=='processor' and case_id in self.amendments:
             records.append(make_amendment(payload['scenario']))
         kind=payload.get('kind')
@@ -156,8 +161,10 @@ class CaseApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(any(e['type']=='error' for e in case['events']))
 
     async def test_a_wrong_agent_stops_the_case_instead_of_deciding(self):
-        # A scripted model plays all three roles correctly, then gets one role wrong at a time.
+        # A scripted model plays all three roles correctly; then one role, the verifier, or a party's structured amounts are wrong.
         agreement=next(r for r in scenario_records('incorrect') if r['kind']=='agreement')
+        reading=dict(sent='USD 10,000.00',received='USD 9,650.00',fee_charged='USD 350.00',agreement_fee='USD 35.00',amendment_fee=None,repeated_entries=False)
+        shown=[]
         def scripted(wrong):
             async def complete(role,prompt,metrics,tools=None):
                 task=json.loads(prompt)
@@ -166,22 +173,34 @@ class CaseApiTests(unittest.IsolatedAsyncioTestCase):
                 if role=='document verifier':
                     answer=dict(fee_minor=35000 if wrong==role else agreement['metadata']['fee_minor'],effective_date=agreement['metadata']['effective_date'],quote=agreement['content'][:20])
                 else:
-                    answer=dict(action='close',amount_minor=0,evidence_ids=[]) if wrong==role else dict(task['verified']['recommendation'],evidence_ids=[])
+                    shown.append(prompt)
+                    answer=dict(reading,agreement_fee='USD 350.00') if wrong==role else reading
                 return {'content':json.dumps(answer)}
             return complete
-        for wrong in (None,'manager','document verifier','resolution reviewer'):
-            with self.subTest(wrong=wrong),patch.object(api.model,'configuration',return_value={'model_configured':True}),patch.object(api.model,'complete',new=scripted(wrong)):
+        def closes_everything(records):
+            result=verify(records)
+            return dict(result,recommendation=dict(result['recommendation'],action='close',amount_minor=0))
+        for wrong in (None,'manager','document verifier','resolution reviewer','verifier','structured amounts'):
+            # With these fields the trail balances and the fee equals the agreed one, so the verifier alone would close the case.
+            self.falsified=dict(fee=3500,settlement=996500,credit=996500,allocation=996500) if wrong=='structured amounts' else {}
+            with self.subTest(wrong=wrong),patch.object(api.model,'configuration',return_value={'model_configured':True}),patch.object(api.model,'complete',new=scripted(wrong)),\
+                 patch.object(api,'verify',new=closes_everything if wrong=='verifier' else verify):
                 cid=(await self.client.post('/cases',json={'scenario':'incorrect','mode':'live'})).json()['id'];await api.TASKS[cid]
                 case=(await self.client.get('/cases/'+cid)).json()
-                approval=await self.client.post(f'/cases/{cid}/approve',json={'version':1,'action':'request_correction','idempotency_key':'k-'+cid})
+                approvals=[await self.client.post(f'/cases/{cid}/approve',json={'version':1,'action':action,'idempotency_key':f'k-{action}-{cid}'}) for action in ('close','request_correction')]
                 if wrong is None:
                     self.assertEqual((case['recommendation']['action'],case['recommendation']['amount_minor']),('request_correction',31500))
-                    self.assertEqual(approval.status_code,200)
+                    self.assertEqual([a.status_code for a in approvals],[409,200])
                 else:
                     self.assertEqual(case['status'],'incomplete');self.assertIsNone(case['recommendation'])
                     self.assertTrue(any(e['type']=='error' for e in case['events']))
-                    self.assertEqual(approval.status_code,409)
+                    self.assertEqual([a.status_code for a in approvals],[409,409])
         self.assertEqual(len(self.corrections),1)
+        # The reviewer works blind: nothing the verifier produced, and none of the structured fields the verifier trusts.
+        self.assertEqual(len(shown),4)
+        for prompt in shown:
+            for leaked in ('verified','recommendation','finding','amount_minor','metadata','315'):
+                self.assertNotIn(leaked,prompt)
 
 
 class CapabilityTests(unittest.TestCase):

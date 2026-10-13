@@ -10,8 +10,8 @@
       "of": 320,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 1.361,
-      "slowest_seconds": 1.532
+      "median_seconds": 1.543,
+      "slowest_seconds": 2.844
     },
     {
       "agent": "processor service: records returned",
@@ -19,8 +19,8 @@
       "of": 340,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 0.012,
-      "slowest_seconds": 0.08
+      "median_seconds": 0.013,
+      "slowest_seconds": 0.067
     },
     {
       "agent": "recipient service: records returned",
@@ -28,8 +28,8 @@
       "of": 160,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 0.009,
-      "slowest_seconds": 0.065
+      "median_seconds": 0.01,
+      "slowest_seconds": 0.029
     },
     {
       "agent": "sender service: records returned",
@@ -38,7 +38,7 @@
       "extra": 0,
       "missed": 0,
       "median_seconds": 0.009,
-      "slowest_seconds": 0.08
+      "slowest_seconds": 0.024
     },
     {
       "agent": "document reader: clean documents",
@@ -46,8 +46,8 @@
       "of": 80,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 1.057,
-      "slowest_seconds": 1.432
+      "median_seconds": 0.949,
+      "slowest_seconds": 2.263
     },
     {
       "agent": "document reader: injected documents",
@@ -55,17 +55,17 @@
       "of": 10,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 1.048,
-      "slowest_seconds": 1.097
+      "median_seconds": 0.981,
+      "slowest_seconds": 1.683
     },
     {
-      "agent": "reviewer: agrees with the checked result",
+      "agent": "reviewer: same result, reached blind",
       "right": 80,
       "of": 80,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 1.183,
-      "slowest_seconds": 1.515
+      "median_seconds": 1.185,
+      "slowest_seconds": 2.522
     },
     {
       "agent": "whole system: final answer",
@@ -73,8 +73,8 @@
       "of": 80,
       "extra": 0,
       "missed": 0,
-      "median_seconds": 3.656,
-      "slowest_seconds": 5.119
+      "median_seconds": 3.927,
+      "slowest_seconds": 6.53
     }
   ],
   "outcomes": {
